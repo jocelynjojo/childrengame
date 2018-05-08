@@ -1,3 +1,51 @@
+// 画布
+var canvas = document.getElementById('canvas');
+var context = canvas.getContext('2d');
+// 更新画布相关信息
+var canvasWidth = canvas.clientWidth;
+var canvasHeight = canvas.clientHeight;
+
+/*
+* 整个游戏对象
+*/
+var Game = {
+    /* 
+    * 初始化函数，这个函数只执行一次
+    */
+    init: function(){
+
+    },
+    bindEvent: function(){
+
+    },
+    setStatus: function(){
+
+    },
+    play: function(){
+
+    },
+    /* 
+    * 结束方式有两种
+    */
+    end: function(){
+
+    },
+    /*
+    * 游戏每一帧的更新函数
+    */
+    update: function(){
+        // 清除操作
+        context.clearRect(0, 0, clientWidth, clientHeight)
+        // 更新对象数据 piece
+        // 判断游戏是否结束
+        // 绘制画布
+        this.draw();
+    }
+}
+
+
+
+
 /*
 * 拼图碎片
 * @param src {String} 碎片图片路径
@@ -13,6 +61,7 @@ function Piece(src, origin, auto){
     // 自动移动相关参数
     this.auto = auto; // 自动移动总共的时间
     this.isInEnd = false; // 是否已经到达结束位置
+    this.autoPath = {}; // 自动运动的路径
 
     // 画图相关参数
     this.img = null;
