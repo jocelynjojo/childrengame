@@ -2,7 +2,7 @@
  * 子类 碎片
  */
 var Piece = function (opts) {
-    var opts = opts || {}
+    var opts= this.opts = opts || {}
     // 设置坐标和尺寸
     this.normalMsg = opts.normalMsg  || {};
     this.pressMsg = opts.pressMsg  || {}; 
@@ -19,6 +19,8 @@ var Piece = function (opts) {
     this.px = this.x + this.pressMsg.disx;
     this.py = this.y + this.pressMsg.disy;
     
+    // 记录像素点
+    this.setImgData();
 }
 
 /** 
@@ -81,22 +83,21 @@ Piece.prototype.draw = function(){
     return this;
 }
 /** 
-* 设置可点击区域
+* 获取画布上是由它时的像素点的集合
 */
-Piece.prototype.setPointArea = function(){
-    context.clearRect(0, 0, clientWidth, clientWidth);
+Piece.prototype.setImgData = function(){
+    context.clearRect(0, 0, this.opts.designW, this.opts.designW);
     this.draw();
-    this.imgData = ctx.getImageData(0, 0, this.opts.designW, this.opts.designH);
+    this.imgData = context.getImageData(0, 0, this.opts.designW, this.opts.designH);
 }
 /** 
 * 判断是否被点击中, 判断点击位置所对应的点是否不为透明像素
 * @param x,y {number,nuber} 点击位置的x,y
-* @param w,h {number,nuber} 画布的宽高
 * @return {boolean} 
 */
-Piece.prototype.isTouch = function(x, y, cw, ch){
+Piece.prototype.isInArea = function(x, y){
     var imgData = this.imgData;
-    var rIndex = (cw * y + x) * 4;
+    var rIndex = (this.opts.designW * y + x) * 4;
     var gIndex = rIndex + 1;
     var bIndex = rIndex + 2;
     var aIndex = rIndex + 3;
@@ -108,7 +109,7 @@ Piece.prototype.isTouch = function(x, y, cw, ch){
 }
 /**
  * 设置碎片状态
- * @param {String} status // 'normal', 'piece'
+ * @param {String} status // 'normal', 'press'
  */
 Piece.prototype.setStatus = function(status){
     this.status = status;

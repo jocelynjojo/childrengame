@@ -20,6 +20,8 @@ Touch.prototype = {
     startY: 0,
     moveX: 0,
     moveY: 0,
+    endX: 0,
+    endY: 0,
     touchStart: function(event){
         var event = event || window.event;  
         this.startX = event.touches[0].clientX;
@@ -37,11 +39,11 @@ Touch.prototype = {
     touchEnd: function(event){
         // console.log('end')
         var event = event || window.event;  
-        var moveX = event.changedTouches[0].clientX;
-        var moveY = event.changedTouches[0].clientY;
+        this.endX = event.changedTouches[0].clientX;
+        this.endY = event.changedTouches[0].clientY;
         this.isTouchStart = false;
         this.isTouchMove = false;
-        console.log('touchend', moveX, moveY)
+        console.log('touchend', this.endX, this.endY)
     },
     releaseEvent: function(event){
         document.removeEventListener('touchstart');

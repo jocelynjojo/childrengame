@@ -9,6 +9,9 @@ function Round(opts){
     this.emptyImage = opts.emptyImage;
     this.fullImage = opts.fullImage;
     this.loc = opts.loc; // {startx, starty, endx, endy}
+
+    // 记录像素点
+    this.setImgData();
 }
 Round.prototype.draw = function(){
     // 画布context
@@ -29,4 +32,30 @@ Round.prototype.draw = function(){
  */
 Round.prototype.setStatus = function(status){
     this.status = status;
+}
+
+/** 
+* 获取画布上是由它时的像素点的集合
+*/
+Round.prototype.setImgData = function(){
+    context.clearRect(0, 0, this.opts.designW, this.opts.designW);
+    this.draw();
+    this.imgData = context.getImageData(0, 0, this.opts.designW, this.opts.designH);
+}
+/** 
+* 判断是否被点击中, 判断点击位置所对应的点是否不为透明像素
+* @param x,y {number,nuber} 点击位置的x,y
+* @return {boolean} 
+*/
+Round.prototype.isInArea = function(x, y){
+    var imgData = this.imgData;
+    var rIndex = (this.opts.designW * y + x) * 4;
+    var gIndex = rIndex + 1;
+    var bIndex = rIndex + 2;
+    var aIndex = rIndex + 3;
+    // 如果x,y 对应的 4个点都为0 ，即为透明，则代表是不可点击， 否则则可以点击
+    if(!imgData[rIndex] && !imgData[gIndex] && !imgData[bIndex] && !imgData[aIndex]){
+        return false;
+    }
+    return true;
 }
