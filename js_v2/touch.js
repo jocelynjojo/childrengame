@@ -1,16 +1,16 @@
 
 var Touch = function() {
     var self = this;
-    document.addEventListener('touchstart', function(event){
+    canvas.addEventListener('touchstart', function(event){
         self.touchStart(event);
     })
-    document.addEventListener('touchmove', function(event){
+    canvas.addEventListener('touchmove', function(event){
         self.touchMove(event);
     })
-    document.addEventListener('touchend', function(event){
+    canvas.addEventListener('touchend', function(event){
         self.touchEnd(event);
     })
-    document.addEventListener('touchcancel',function(event){
+    canvas.addEventListener('touchcancel',function(event){
         self.touchEnd(event)
     })
 }
