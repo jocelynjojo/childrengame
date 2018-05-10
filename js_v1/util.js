@@ -29,6 +29,14 @@ var util = {
                 }
             }
         }
+    },
+    /**
+     * 继承的最佳实现
+     */
+    inHeritObject: function(parentType, childType){
+        var prototype = Object.create(parentType.prototype);
+        prototype.constructor = childType;
+        childType.prototype = prototype;
     }
 
 }

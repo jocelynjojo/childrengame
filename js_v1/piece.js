@@ -2,7 +2,8 @@
  * 子类 碎片
  */
 var Piece = function (opts) {
-    var opts= this.opts = opts || {}
+    var opts = opts || {}
+    Ele.call(this, opts);
     // 设置坐标和尺寸
     this.normalMsg = opts.normalMsg  || {};
     this.pressMsg = opts.pressMsg  || {}; 
@@ -32,7 +33,7 @@ var Piece = function (opts) {
     this.linear;
     this.moveTime = 0; // 在这条路径上移动的次数
 }
-
+util.inHeritObject(Ele, Piece);
 /** 
  * 根据存在的路径移动
 */
@@ -69,34 +70,7 @@ Piece.prototype.draw = function(){
     }
     return this;
 }
-/** 
-* 获取画布上是由它时的像素点的集合
-*/
-Piece.prototype.setImgData = function(){
-    context.clearRect(0, 0, this.opts.designW, this.opts.designW);
-    this.draw();
-    this.imgData = context.getImageData(0, 0, this.opts.designW, this.opts.designH);
-}
-/** 
-* 判断是否被点击中, 判断点击位置所对应的点是否不为透明像素
-* @param x,y {number,nuber} 点击位置的x,y
-* @return {boolean} 
-*/
-Piece.prototype.isInArea = function(x, y){
-    var imgData = this.imgData.data;
-    x = Math.floor(x);
-    y = Math.floor(y)
-    var rIndex = (this.opts.designW * y + x) * 4;
-    var colorR = imgData[rIndex]
-    var colorG = imgData[rIndex + 1]
-    var colorB = imgData[rIndex + 2]
-    var colorA = imgData[rIndex + 3]
-    // 如果x,y 对应的 4个点都为0 ，即为透明，则代表是不可点击， 否则则可以点击
-    if((colorR || colorG || colorB || colorA) && this.isInStart()){
-        return true;
-    }
-    return false;
-}
+
 /**
  * 设置碎片状态
  * @param {String} status // 'normal', 'press'

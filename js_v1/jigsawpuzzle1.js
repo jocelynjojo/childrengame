@@ -24,7 +24,7 @@ var Game = {
     var _self = this
     // 加载资源图片, 加载完成交互才开始
     var resources = opts.normalSrc.concat(opts.pressSrc)
-    resources.push(opts.emptySrc, opts.fullSrc)
+    resources.push(opts.emptySrc, opts.fullSrc, opts.finishbgSrc, opts.againSrc, opts.hanberSrc, opts.nextSrc, opts.brightSrc, opts.greySrc)
     var pieceNum = opts.pieceNum
 
     util.resourceOnload(resources, function (images) {
@@ -32,6 +32,12 @@ var Game = {
       opts.pressImgs = images.slice(pieceNum, 2 * pieceNum)
       opts.emptyImage = images[2 * pieceNum]
       opts.fullImage = images[2 * pieceNum + 1]
+      opts.finishbgImg = images[2 * pieceNum + 2]
+      opts.againImg = images[2 * pieceNum + 3]
+      opts.hanberImg = images[2 * pieceNum + 4]
+      opts.nextImg = images[2 * pieceNum + 5]
+      opts.brightImg = images[2 * pieceNum + 6]
+      opts.greyImg = images[2 * pieceNum + 7]
       _self.play()
     })
   },
