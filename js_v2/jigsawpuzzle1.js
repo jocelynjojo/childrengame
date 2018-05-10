@@ -126,10 +126,13 @@ var Game = {
     }
     // 判断手指是否在点击canvas
     if (this.touch.isTouchStart) {
+      showText('被点击了')
       for (var i = 0; i < total; i++) {
         piece = this.pieces[i]
         // 是否碎片已经是点中状态
+         showText('未知'+ piece.isInArea(sx, sy) + '' + !(piece.isInPath()))
         if (piece.isPressed()) {
+          showText('被点中了')
           if (this.touch.isTouchMove) {
             // 如果手指进行了移动，则移动碎片设置碎片位置，否则不作为
             piece.setLoc(mx, my);
@@ -145,6 +148,7 @@ var Game = {
     } else {
       //如果没有点击 1、一直没有点击则不作为， 2 手指放开，碎片恢复或移动到终点
       var finishIndex = -1;
+      showText('没有点击')
       for (var i = 0; i < total; i++) {
         piece = this.pieces[i]
         piece.setStatus('normal');
