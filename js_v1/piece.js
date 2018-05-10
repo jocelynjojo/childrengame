@@ -84,16 +84,18 @@ Piece.prototype.setImgData = function(){
 */
 Piece.prototype.isInArea = function(x, y){
     var imgData = this.imgData.data;
+    x = Math.floor(x);
+    y = Math.floor(y)
     var rIndex = (this.opts.designW * y + x) * 4;
     var colorR = imgData[rIndex]
     var colorG = imgData[rIndex + 1]
     var colorB = imgData[rIndex + 2]
     var colorA = imgData[rIndex + 3]
     // 如果x,y 对应的 4个点都为0 ，即为透明，则代表是不可点击， 否则则可以点击
-    if(!colorR && !colorG && !colorB && !colorA){
-        return false;
+    if((colorR || colorG || colorB || colorA) && this.isInStart()){
+        return true;
     }
-    return true;
+    return false;
 }
 /**
  * 设置碎片状态

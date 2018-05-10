@@ -49,6 +49,8 @@ Round.prototype.setImgData = function(){
 */
 Round.prototype.isInArea = function(x, y){
     var imgData = this.imgData.data;
+    x = Math.floor(x);
+    y = Math.floor(y);
     var rIndex = (this.opts.designW * y + x) * 4;
     var gIndex = rIndex + 1;
     var bIndex = rIndex + 2;
