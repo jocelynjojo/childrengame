@@ -29,14 +29,14 @@ Touch.prototype = {
         this.startX = event.touches[0].clientX;
         this.startY = event.touches[0].clientY;
         this.isTouchStart = true;
-        console.log('touchstart', this.startX, this.startY)
+        // console.log('touchstart', this.startX, this.startY)
     },
     touchMove: function(event){
         var event = event || window.event;  
         this.moveX = event.touches[0].clientX;
         this.moveY = event.touches[0].clientY;
         this.isTouchMove = true;
-        console.log('touchmove', this.moveX, this.moveY)
+        // console.log('touchmove', this.moveX, this.moveY)
     },
     touchEnd: function(event){
         var event = event || window.event;  
@@ -44,7 +44,7 @@ Touch.prototype = {
         this.endY = event.changedTouches[0].clientY;
         this.isTouchStart = false;
         this.isTouchMove = false;
-        console.log('touchend', this.endX, this.endY)
+        // console.log('touchend', this.endX, this.endY)
     },
     releaseEvent: function(event){
         // document.removeEventListener('touchstart');

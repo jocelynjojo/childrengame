@@ -1,6 +1,12 @@
 var Config = {
     designW: 2048,
     designH: 1536,
+    finishbgSrc: 'images/finishbg.png',
+    againSrc: 'images/btn_again.png',
+    hanberSrc: 'images/btn_hanber.png',
+    nextSrc: 'images/btn_next.png',
+    brightSrc: 'images/star_bright.png',
+    greySrc: 'images/star_gray.png',
     emptySrc: 'images/jigsaw1_emptyround.png',
     fullSrc: 'images/jigsaw1_fullround.png',
     pieceNum: 6,
