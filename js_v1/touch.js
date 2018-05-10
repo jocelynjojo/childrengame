@@ -5,8 +5,9 @@ var Touch = function() {
         self.touchStart(event);
     })
     document.addEventListener('touchmove', function(event){
+        event.preventDefault()
         self.touchMove(event);
-    })
+    },{passive:false})
     document.addEventListener('touchend', function(event){
         self.touchEnd(event);
     })
