@@ -31,5 +31,7 @@ var Config = {
     ],
     emptyMsg: {w:607, h:608, x:727, y:490},
     fullMsg: {w:607, h:607, x:727, y:489},
-    speed: 5 // 释放时候碎片的速度
+    toEndSpeed: 50, // 释放时候碎片的速度
+    toStartSpeed: 80,
+    maxTime: 5 //对应的速度最多能次数，大于这个次数，需要提速
 }

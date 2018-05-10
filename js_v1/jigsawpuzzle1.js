@@ -2,8 +2,8 @@
 var canvas = document.getElementById('canvas')
 var context = canvas.getContext('2d')
 // 屏幕宽高
-var clientWidth = document.clientWidth
-var clientHeight = document.clientHeight
+var clientWidth = canvas.clientWidth
+var clientHeight = canvas.clientHeight
 
 /*
 * 整个游戏对象
@@ -57,7 +57,9 @@ var Game = {
         pressMsg: opts.pressMsgs[i],
         normalImg: opts.normalImgs[i],
         pressImg: opts.pressImgs[i],
-        speed: opts.speed,
+        toEndSpeed: opts.toEndSpeed,
+        toStartSpeed: opts.toStartSpeed,
+        maxTime: opts.maxTime,
         designW: opts.designW,
         designH: opts.designH
       }
@@ -67,6 +69,7 @@ var Game = {
     this.touch = new Touch()
 
     // 开始进行绘画更新
+    console.log('准备开始进行绘画更新')
     this.update()
   },
   /* 
@@ -76,6 +79,7 @@ var Game = {
     context.clearRect(0, 0, this.opts.designW, this.opts.designW)
     this.round.setStatus('full')
     this.touch.releaseEvent()
+    this.draw()
   },
   /*
   * 游戏每一帧的更新函数
@@ -92,7 +96,7 @@ var Game = {
     // 判断游戏是否结束
     if (this.status == 'end') {
       this.end()
-    }else {
+    } else {
       requestAnimFrame(function () {
         _self.update()
       })
@@ -117,63 +121,72 @@ var Game = {
     var ey = this.touch.endY
     ex = ex / clientWidth * this.opts.designW
     ey = ey / clientHeight * this.opts.designH
-
-    // 被点击的碎片的index
-    var pressIndex = -1;
-    // 循环判断是否有碎片处于点击状态
-    for (var i = 0; i < total; i++){
-        if(this.pieces[i].status == 'press'){
-            pressIndex = i;
-            break;
-        }
+    if (!sx) {
+      return;
     }
-    // 如果碎片不等于 -1 说明有碎片处于点击态
-    if(pressIndex != -1){
-        
-    }else{
-
-    }
-    for (var i = 0; i < total; i++) {
-      piece = this.pieces[i]
-
-      // 判断是否开始点击
-      if (this.touch.isTouchStart) {
-        piece.setStatus('press')
-        var x = this.touch.startX
-        var y = this.touch.startY
-        if (this.touch.isTouchMove) {
-          x = this.touch.moveX
-          y = this.touch.moveY
+    // 判断手指是否在点击canvas
+    if (this.touch.isTouchStart) {
+      for (var i = 0; i < total; i++) {
+        piece = this.pieces[i]
+        // 是否碎片已经是点中状态
+        if (piece.isPressed()) {
+          if (this.touch.isTouchMove) {
+            // 如果手指进行了移动，则移动碎片设置碎片位置，否则不作为
+            piece.setLoc(mx, my);
+          }
+        } else if (piece.isInArea(sx, sy) && !(piece.isInPath())) {
+          //判断是否点钟碎片，如果点中，则设置碎片状态，为点中状态
+          piece.setStatus('press');
+          piece.setTouchDis(sx, sy);
+          break;
         }
-        x = x / clientWidth * this.opts.designW
-        y = y / clientHeight * this.opts.designH
-      }else {
-        // 如果手指没有点击，有两种情况 1 手指一直没有点击 2 手指刚放开，碎片回复或者移动到终点
-        if (piece.isBeenMove() && !(piece.isInTheEnd())) {
-          // 如果手指刚放开 ， 判断手指所在的位置是否到达 圆圈内
-          if (this.round.isInArea(ex, ey)) {
-            piece.translate('end')
-          }else {
-            piece.translate('start')
+      }
+    } else {
+      //如果没有点击 1、一直没有点击则不作为， 2 手指放开，碎片恢复或移动到终点
+      var finishIndex = -1;
+      for (var i = 0; i < total; i++) {
+        piece = this.pieces[i]
+        piece.setStatus('normal');
+        //如果碎片在终点
+        if(piece.isInTheEnd()){
+          finish ++;
+          if(finish == total){
+            this.setStatus('end');
+          }
+        }else if (!(piece.isInStart())) {
+          // 如果碎片不在终点也不在起点， 判断手指所在的位置是否到达 圆圈内
+          if (piece.hasPath()) {
+            piece.translate()
+          } else {
+            if (this.round.isInArea(ex, ey)) {
+              piece.createPath(ex, ey, 'end')
+
+            } else {
+              piece.createPath(ex, ey, 'start')
+            }
           }
         }
       }
-      // 判断碎片到达了它末尾的位置
-      if (piece.isInTheEnd()) {
-        finish++
-        if (finish == total) {
-          this.setStatus('end')
-        }
-      }
+
     }
   },
   draw: function () {
     // 先画圈的背景
     this.round.draw()
     // 再画碎片
-    this.pieces.forEach(function (piece) {
-      piece.draw()
-    })
+    var piece, pressIndex = -1;
+    for(var i = 0, len = this.pieces.length; i < len; i++){
+      piece = this.pieces[i];
+      if(piece.isPressed()){
+        pressIndex = i;
+      }else{
+        piece.draw();
+      }
+    }
+    if(pressIndex != -1){
+      this.pieces[pressIndex].draw();
+    }
+
   }
 }
 
