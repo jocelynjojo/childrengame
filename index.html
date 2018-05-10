@@ -34,11 +34,20 @@
             height: 100%;
             z-index: 10;
         }
+        div{
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: 20;
+            font-size: 30px;
+            color: #000;
+        }
     </style>
 </head>
 <body>
     <img src="images/jigsaw1_bg.jpg" alt="">   
     <canvas id="canvas" width="2048" height="1536"></canvas>
+    <div id='show'>ttt</div>
     <script src="js_v2/util.js"></script>
     <script src="js_v2/round.js"></script>
     <script src="js_v2/piece.js"></script>

@@ -135,6 +135,7 @@ var Game = {
             piece.setLoc(mx, my);
           }
         } else if (piece.isInArea(sx, sy) && !(piece.isInPath())) {
+          showText('击中')
           //判断是否点钟碎片，如果点中，则设置碎片状态，为点中状态
           piece.setStatus('press');
           piece.setTouchDis(sx, sy);
@@ -188,6 +189,7 @@ var Game = {
     }
 
   }
+  
 }
 
 // 初始化

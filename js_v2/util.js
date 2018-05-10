@@ -8,6 +8,11 @@ window.requestAnimFrame =
     function (callback) {
         window.setTimeout(callback, 1000 / 30);
     }
+var show = document.getElementById('show');
+var showText= function(str){
+    
+    show.innerHTML = str;
+  }
 var util = {
     /**
     * 预加载资源文件
