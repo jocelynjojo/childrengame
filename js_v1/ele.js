@@ -29,6 +29,7 @@ Ele.prototype.isInArea = function(x, y){
     }
     return false;
 }
+
 /**
  * 判断该元素当前的位置是否是它开始的位置，或者说是否得到元素点集合的位置
  * 碎片会移动，重写这方法，其他元素不会移动，不需重写这个方法
@@ -37,6 +38,26 @@ Ele.prototype.isInStart = function(){
     return true;
 }
 /**
- * 通用方法 draw()
+ * 根据传入的msg 设置自己的 x, y, w, h;
+ * @param {Image} img
+ * @param {Object} msg img 对应的的信息 {w,h,x,y,disx,disy} disx 和 x 不一定存在
+ * @param {Object} extra 基本xy对应的信息
  */
-Ele.prototype.draw = function () {}
+Ele.prototype.setMsg = function(img, msg, extra){
+    this.img = img;
+    this.x = msg.x;
+    this.y = msg.y;
+    this.w = msg.w;
+    this.h = msg.h;
+    if(extra && !this.x && !this.y){
+        this.x = msg.disx + extra.x;
+        this.y = msg.disy + extra.y;
+    }
+}
+/**
+ * 通用方法 draw()
+ * 如果进行了上面setMsg 的方法可以直接用，其他的需要重写
+ */
+Ele.prototype.draw = function () {
+    context.drawImage(this.img, this.x, this.y, this.w, this.h)
+}

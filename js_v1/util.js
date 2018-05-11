@@ -8,6 +8,8 @@ window.requestAnimFrame =
     function (callback) {
         window.setTimeout(callback, 1000 / 30);
     }
+
+
 var util = {
     /**
     * 预加载资源文件
@@ -33,12 +35,22 @@ var util = {
     /**
      * 继承的最佳实现
      */
-    inHeritObject: function(parentType, childType){
+    inHeritObject: function (parentType, childType) {
         var prototype = Object.create(parentType.prototype);
         prototype.constructor = childType;
         childType.prototype = prototype;
+    },
+    setRootFont: function () {
+        var clientW = document.documentElement.clientWidth;
+        var html = document.getElementsByTagName('html')[0];
+        console.log(html)
+        var size = Config.desighFont / Config.designW * clientW;
+        html.style.fontSize = size + 'px';
     }
 
+}
+window.onload = function () {
+    util.setRootFont()
 }
 
 

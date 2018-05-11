@@ -1,12 +1,12 @@
 /**
  * 子类 碎片
  */
-var Piece = function (opts) {
+var Piece = function (opts, speOpt) {
     var opts = opts || {}
     Ele.call(this, opts);
     // 设置坐标和尺寸
-    this.normalMsg = opts.normalMsg  || {};
-    this.pressMsg = opts.pressMsg  || {}; 
+    this.normalMsg = speOpt.normalMsg  || {};
+    this.pressMsg = speOpt.pressMsg  || {}; 
 
     // 自由移动相关的属性
     this.toEndSpeed = opts.toEndSpeed; // 碎片自由移动到结尾的速度
@@ -15,8 +15,8 @@ var Piece = function (opts) {
 
     // 特有属性 当前状态  'normal', 'press'
     this.status = 'normal';
-    this.normalImg = opts.normalImg;
-    this.pressImg = opts.pressImg;
+    this.normalImg = speOpt.normalImg;
+    this.pressImg = speOpt.pressImg;
     
     // 当前的位置
     this.moveTo(this.normalMsg.startx, this.normalMsg.starty);
