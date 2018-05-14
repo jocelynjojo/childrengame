@@ -4,7 +4,10 @@ var context = canvas.getContext('2d')
 // 屏幕宽高
 var clientWidth = canvas.clientWidth
 var clientHeight = canvas.clientHeight
-
+// 测试安卓
+var testTime = 0;
+var updateTime = 0;
+var drawTime = 0;
 /*
 * 整个游戏对象
 */
@@ -103,6 +106,14 @@ var Game = {
     if (type == 'tap') {
       this.tabEvent(extra)
     }
+    if(type == 'test'){
+      testTime++
+      console.log('test')
+    }
+    if(type == 'end'){
+      
+      alert('testTime:'+testTime+' updateTime:'+updateTime+'drawTime'+drawTime)
+    }
   },
   tabEvent: function (extra) {
 
@@ -161,6 +172,8 @@ var Game = {
     if (!sx && !sy && !mx && !my) {
       return;
     }
+    updateTime++
+    console.log('update')
     // 判断手指是否在点击canvas
     if (this.touch.isTouchStart) {
       for (var i = 0; i < total; i++) {
@@ -222,6 +235,10 @@ var Game = {
     }
     if (pressIndex != -1) {
       this.pieces[pressIndex].draw();
+    }
+    if(updateTime){
+      drawTime++
+      console.log('draw')
     }
 
   },
