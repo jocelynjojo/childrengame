@@ -39,19 +39,10 @@ var util = {
         var prototype = Object.create(parentType.prototype);
         prototype.constructor = childType;
         childType.prototype = prototype;
-    },
-    setRootFont: function () {
-        var clientW = document.documentElement.clientWidth;
-        var html = document.getElementsByTagName('html')[0];
-        console.log(html)
-        var size = Config.desighFont / Config.designW * clientW;
-        html.style.fontSize = size + 'px';
     }
 
 }
-window.onload = function () {
-    util.setRootFont()
-}
+
 
 
 
