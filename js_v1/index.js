@@ -7,6 +7,7 @@ var clientHeight = canvas.clientHeight
 // 测试安卓
 var testTime = 0;
 var updateTime = 0;
+var drawTime = 0;
 /*
 * 整个游戏对象
 */
@@ -112,7 +113,7 @@ var Game = {
     }
     if(type == 'end'){
       
-      alert('testTime:'+testTime+' updateTime:'+updateTime)
+      alert('testTime:'+testTime+' updateTime:'+updateTime+'drawTime'+drawTime)
     }
   },
   tabEvent: function (extra) {
@@ -235,6 +236,10 @@ var Game = {
     }
     if (pressIndex != -1) {
       this.pieces[pressIndex].draw();
+    }
+    if(updateTime){
+      drawTime++
+      console.log('draw')
     }
 
   },
