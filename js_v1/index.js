@@ -15,7 +15,8 @@ var Game = {
   * @retrun {[type]} [description]
   */
   init: function (opts) {
-    var opts = Object.assign({}, opts, Config)
+    var opts = util.assign({}, opts, Config)
+    console.log(opts)
     opts.context = context
     // 更新
     this.opts = opts
