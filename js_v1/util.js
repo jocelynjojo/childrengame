@@ -24,12 +24,20 @@ var util = {
             images[i] = new Image();
             images[i].src = resource[i]
             // 图片加载完成
-            images[i].onload = function () {
+            if (images[i].complete) {
                 finish++
                 if (finish == total) {
                     callback(images);
                 }
+            } else {
+                images[i].onload = function () {
+                    finish++
+                    if (finish == total) {
+                        callback(images);
+                    }
+                }
             }
+
         }
     },
     /**
@@ -39,6 +47,20 @@ var util = {
         var prototype = Object.create(parentType.prototype);
         prototype.constructor = childType;
         childType.prototype = prototype;
+    },
+    /**
+     * 克隆对象 模拟assign 方法
+     * @param {objects} 对象 以逗号分隔
+     */
+    assign: function(){
+        var obj = {}, o = null;
+        for(var i = 0, len = arguments.length; i < len; i++){
+            o = arguments[i];
+            for(var key in o){
+                obj[key] = o[key];
+            } 
+        }
+        return obj;
     }
 
 }
