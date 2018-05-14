@@ -18,7 +18,7 @@ var Game = {
     opts.context = context
     // 更新
     this.opts = opts
-    this.setStatus('ready')
+    this.setStatus('start')
 
     var _self = this
     // 加载资源图片, 加载完成交互才开始
@@ -44,13 +44,12 @@ var Game = {
   },
   /** 
   * 更新游戏状态
-  * @param {Staring} status //ready:准备开始游戏 start:开始游戏， end：结束游戏
+  * @param {Staring} status //start:开始游戏， end：结束游戏
   */
   setStatus: function (status) {
     this.status = status
   },
   play: function () {
-    this.setStatus('start');
     var _self = this
     var opts = this.opts
     // 创建分数实例
@@ -88,7 +87,7 @@ var Game = {
   * 结束游戏，停止循环
   */
   end: function () {
-    context.clearRect(0, 0, this.opts.designW, this.opts.designH)
+    context.clearRect(0, 0, this.opts.designW, this.opts.designW)
     this.round.setStatus('full')
     this.touch.releaseEvent()
     this.lastDraw();
@@ -103,6 +102,7 @@ var Game = {
     if (type == 'tap') {
       this.tabEvent(extra)
     }
+
       },
   tabEvent: function (extra) {
 
@@ -124,7 +124,7 @@ var Game = {
   update: function () {
     var _self = this
     // 清除操作
-    context.clearRect(0, 0, this.opts.designW, this.opts.designH)
+    context.clearRect(0, 0, this.opts.designW, this.opts.designW)
     // 更新对象数据 piece
     this.updatePieces()
 
@@ -161,7 +161,7 @@ var Game = {
     if (!sx && !sy && !mx && !my) {
       return;
     }
-    
+   
     // 判断手指是否在点击canvas
     if (this.touch.isTouchStart) {
       for (var i = 0; i < total; i++) {
@@ -225,7 +225,6 @@ var Game = {
       this.pieces[pressIndex].draw();
     }
     
-
   },
   lastDraw: function () {
     this.draw();

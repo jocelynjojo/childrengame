@@ -5,7 +5,7 @@ var Ele = function (opts) {
 * 获取画布上只有它时的像素点的集合
 */
 Ele.prototype.setImgData = function(){
-    context.clearRect(0, 0, this.opts.designW, this.opts.designH);
+    context.clearRect(0, 0, this.opts.designW, this.opts.designW);
     this.draw();
     this.imgData = context.getImageData(0, 0, this.opts.designW, this.opts.designH);
 }
