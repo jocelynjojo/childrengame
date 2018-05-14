@@ -4,7 +4,6 @@ var context = canvas.getContext('2d')
 // 屏幕宽高
 var clientWidth = canvas.clientWidth
 var clientHeight = canvas.clientHeight
-
 /*
 * 整个游戏对象
 */
@@ -104,7 +103,7 @@ var Game = {
     if (type == 'tap') {
       this.tabEvent(extra)
     }
-  },
+      },
   tabEvent: function (extra) {
 
     if (this.isEnd()) {
@@ -162,6 +161,7 @@ var Game = {
     if (!sx && !sy && !mx && !my) {
       return;
     }
+    
     // 判断手指是否在点击canvas
     if (this.touch.isTouchStart) {
       for (var i = 0; i < total; i++) {
@@ -224,6 +224,7 @@ var Game = {
     if (pressIndex != -1) {
       this.pieces[pressIndex].draw();
     }
+    
 
   },
   lastDraw: function () {
