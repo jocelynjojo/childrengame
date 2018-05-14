@@ -2,8 +2,9 @@
 var Touch = function () {
     var self = this;
     document.addEventListener('touchstart', function (event) {
+        event.preventDefault()
         self.touchStart(event);
-    })
+    }, { passive: false })
     document.addEventListener('touchmove', function (event) {
         event.preventDefault()
         self.touchMove(event);
