@@ -15,12 +15,11 @@ var Game = {
   * @retrun {[type]} [description]
   */
   init: function (opts) {
-    var opts = util.assign({}, opts, Config)
-    console.log(opts)
+    var opts = util.assign(opts, Config)
     opts.context = context
     // 更新
     this.opts = opts
-    this.setStatus('ready')
+    this.setStatus('start')
 
     var _self = this
     // 加载资源图片, 加载完成交互才开始
@@ -46,13 +45,12 @@ var Game = {
   },
   /** 
   * 更新游戏状态
-  * @param {Staring} status //ready:准备开始游戏 start:开始游戏， end：结束游戏
+  * @param {Staring} status //start:开始游戏， end：结束游戏
   */
   setStatus: function (status) {
     this.status = status
   },
   play: function () {
-    this.setStatus('start');
     var _self = this
     var opts = this.opts
     // 创建分数实例
@@ -213,14 +211,19 @@ var Game = {
     // 先画圈的背景
     this.round.draw()
     // 再画碎片
-    var piece, pressIndex = -1;
+    var piece, pressIndex = -1, pathIndex = -1;
     for (var i = 0, len = this.pieces.length; i < len; i++) {
       piece = this.pieces[i];
       if (piece.isPressed()) {
         pressIndex = i;
-      } else {
+      }else if(piece.isInPath()){
+        pathIndex = i;
+      }else{
         piece.draw();
       }
+    }
+    if(pathIndex != -1){
+      this.pieces[pathIndex].draw();
     }
     if (pressIndex != -1) {
       this.pieces[pressIndex].draw();

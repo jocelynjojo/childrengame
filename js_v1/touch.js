@@ -1,9 +1,11 @@
 
 var Touch = function () {
     var self = this;
-    document.addEventListener('touchstart', function (event) {
+    canvas.addEventListener('touchstart', function (event) {
+        event.stopPropagation();
+        event.preventDefault()
         self.touchStart(event);
-    })
+    }, { passive: false })
     document.addEventListener('touchmove', function (event) {
         event.preventDefault()
         self.touchMove(event);
@@ -31,7 +33,6 @@ Touch.prototype = {
         this.startX = event.touches[0].clientX;
         this.startY = event.touches[0].clientY;
         this.isTouchStart = true;
-        Game.trigger('touchstart');
         // console.log('touchstart', this.startX, this.startY)
     },
     touchMove: function (event) {
@@ -40,7 +41,6 @@ Touch.prototype = {
             this.moveX = event.touches[0].clientX;
             this.moveY = event.touches[0].clientY;
             this.isTouchMove = true;
-            Game.trigger('touchmove');
         }
         // console.log('touchmove', this.moveX, this.moveY)
     },
@@ -51,7 +51,6 @@ Touch.prototype = {
         this.isTouchStart = false;
         this.isTouchMove = false;
         var nowTime = new Date().getTime();
-        Game.trigger('touchend');
         if(nowTime - this.startTime < 200){
             Game.trigger('tap',{tapx:this.endX, tapy:this.endY});
         }

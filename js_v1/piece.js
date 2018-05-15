@@ -141,7 +141,7 @@ Piece.prototype.createPath = function(ex, ey, direction){
     times = times > this.maxTime? this.maxTime : times;
     var speedx = disx / times; // 横坐标的速度
     var speedy = disy / times; // 纵坐标的速度
-    this.linear = {fromx:fromx, fromy:fromy, tox:tox, toy:toy, speedx:speedx, speedy:speedy, times:times};
+    this.linear = {fromx:fromx, fromy:fromy, tox:tox, toy:toy, speedx:speedx, speedy:speedy, times:times}
     this.moveTime = 0; // 创建完就开始自动一动
 }
 /**

@@ -10,6 +10,8 @@ html,body{
     width: 100%;
     height: 100%; 
     overflow: hidden;
+    background: fff;
+    color: #000;
 }
 .secenbg{
     width: 100%;

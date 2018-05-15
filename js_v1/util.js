@@ -6,7 +6,7 @@ window.requestAnimFrame =
     window.oRequestAnimationFrame ||
     window.msRequestAnimationFrame ||
     function (callback) {
-        window.setTimeout(callback, 1000 / 30);
+        window.setTimeout(callback, 1000 / 60);
     }
 
 
@@ -24,20 +24,12 @@ var util = {
             images[i] = new Image();
             images[i].src = resource[i]
             // 图片加载完成
-            if (images[i].complete) {
+            images[i].onload = function () {
                 finish++
                 if (finish == total) {
                     callback(images);
                 }
-            } else {
-                images[i].onload = function () {
-                    finish++
-                    if (finish == total) {
-                        callback(images);
-                    }
-                }
             }
-
         }
     },
     /**
@@ -61,10 +53,9 @@ var util = {
             } 
         }
         return obj;
-    }
+    },
 
 }
-
 
 
 
