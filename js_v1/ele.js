@@ -4,7 +4,7 @@ var Ele = function (opts) {
 /** 
 * 获取画布上只有它时的像素点的集合
 */
-Ele.prototype.setImgData = function(){
+Ele.prototype.setImgData = function () {
     context.clearRect(0, 0, this.opts.designW, this.opts.designH);
     this.draw();
     this.imgData = context.getImageData(0, 0, this.opts.designW, this.opts.designH);
@@ -14,7 +14,7 @@ Ele.prototype.setImgData = function(){
 * @param x,y {number,nuber} 点击位置的x,y
 * @return {boolean} 
 */
-Ele.prototype.isInArea = function(x, y){
+Ele.prototype.isInArea = function (x, y) {
     var imgData = this.imgData.data;
     x = Math.floor(x);
     y = Math.floor(y)
@@ -24,9 +24,16 @@ Ele.prototype.isInArea = function(x, y){
     var colorB = imgData[rIndex + 2]
     var colorA = imgData[rIndex + 3]
     // 如果x,y 对应的 4个点都为0 ，即为透明，则代表是不可点击， 否则则可以点击
-    if((colorR || colorG || colorB || colorA) && this.isInStart()){
-        return true;
+    if (this.colorR || this.colorR == 0) {
+        if((Math.abs(colorR - this.colorR) < 5) && (Math.abs(colorG - this.colorG) < 5) && (Math.abs(colorB - this.colorB) < 5) && (Math.abs(colorA - this.colorA) < 5) && this.isInStart()){
+            return true;
+        }
+    } else {
+        if ((colorR || colorG || colorB || colorA) && this.isInStart()) {
+            return true;
+        }
     }
+
     return false;
 }
 
@@ -34,7 +41,7 @@ Ele.prototype.isInArea = function(x, y){
  * 判断该元素当前的位置是否是它开始的位置，或者说是否得到元素点集合的位置
  * 碎片会移动，重写这方法，其他元素不会移动，不需重写这个方法
  */
-Ele.prototype.isInStart = function(){
+Ele.prototype.isInStart = function () {
     return true;
 }
 /**
@@ -43,13 +50,13 @@ Ele.prototype.isInStart = function(){
  * @param {Object} msg img 对应的的信息 {w,h,x,y,disx,disy} disx 和 x 不一定存在
  * @param {Object} extra 基本xy对应的信息
  */
-Ele.prototype.setMsg = function(img, msg, extra){
+Ele.prototype.setMsg = function (img, msg, extra) {
     this.img = img;
     this.x = msg.x;
     this.y = msg.y;
     this.w = msg.w;
     this.h = msg.h;
-    if(extra && !this.x && !this.y){
+    if (extra && !this.x && !this.y) {
         this.x = msg.disx + extra.x;
         this.y = msg.disy + extra.y;
     }

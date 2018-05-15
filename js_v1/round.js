@@ -12,7 +12,11 @@ function Round(opts){
     this.loc = opts.loc; // {startx, starty, endx, endy}
 
     // 记录像素点
-    this.setImgData();
+    this.colorR = this.emptyMsg.r;
+    this.colorG = this.emptyMsg.g;
+    this.colorB = this.emptyMsg.b;
+    this.colorA = this.emptyMsg.a;
+    this.imgData = this.opts.imgData;
 }
 util.inHeritObject(Ele, Round);
 

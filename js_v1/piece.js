@@ -7,6 +7,11 @@ var Piece = function (opts, speOpt) {
     // 设置坐标和尺寸
     this.normalMsg = speOpt.normalMsg  || {};
     this.pressMsg = speOpt.pressMsg  || {}; 
+    this.colorR = this.normalMsg.r;
+    this.colorG = this.normalMsg.g;
+    this.colorB = this.normalMsg.b;
+    this.colorA = this.normalMsg.a;
+    this.imgData = opts.imgData;
 
     // 自由移动相关的属性
     this.toEndSpeed = opts.toEndSpeed; // 碎片自由移动到结尾的速度
@@ -21,8 +26,6 @@ var Piece = function (opts, speOpt) {
     // 当前的位置
     this.moveTo(this.normalMsg.startx, this.normalMsg.starty);
     
-    // 记录像素点
-    this.setImgData();
     // 记录被点中时刻的，被点的位置和碎片左边缘位置和上边缘的距离
     this.touchdisx;
     this.touchdisy;
@@ -62,10 +65,11 @@ Piece.prototype.draw = function(){
     // 绘制碎片
     switch(this.status){
         case 'normal':
-            context.drawImage(this.normalImg, this.x, this.y, this.normalMsg.w, this.normalMsg.h);
-            break;
         case 'press':
             context.drawImage(this.pressImg, this.px, this.py, this.pressMsg.w, this.pressMsg.h);
+            break;
+        case 'end':
+            context.drawImage(this.normalImg, this.x, this.y, this.normalMsg.w, this.normalMsg.h);
             break;
     }
     return this;
@@ -73,16 +77,20 @@ Piece.prototype.draw = function(){
 
 /**
  * 设置碎片状态
- * @param {String} status // 'normal', 'press'
+ * @param {String} status // 'normal', 'press','end'
  */
 Piece.prototype.setStatus = function(status){
     this.status = status;
 }
 /**
- * 判断碎片是否到达了他终端的位置
+ * 判断碎片是否到达了他终端的位置, 如果到达了，设置为true， 并设置状态为 'end'
  */
 Piece.prototype.isInTheEnd = function(){
-    return (this.x == this.normalMsg.endx) && (this.y == this.normalMsg.endy);
+    var bool = (this.x == this.normalMsg.endx) && (this.y == this.normalMsg.endy);
+    if(bool){
+        this.setStatus('end');
+    }
+    return bool;
 }
 /**
  * 判断碎片是否离开起点
@@ -97,11 +105,12 @@ Piece.prototype.isPressed = function(){
     return this.status == 'press'
 }
 /**
- * 设置碎片被点中时刻，被点的位置和碎片左边缘位置的距离
+ * 设置碎片被点中时刻，被点的位置和碎片左边缘位置的距离，当设置被点中时刻的时候，碎片状态设置为'press'
  * @param {number} sx 手指的点击位置x 所转化成的canvas 的x
  * @param {number} sy 手指的点击位置y 所转化成的canvas 的y
  */
 Piece.prototype.setTouchDis = function(sx, sy){
+    this.setStatus('press');
     this.touchdisx = sx - this.x;
     this.touchdisy = sy - this.y;
 }

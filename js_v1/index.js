@@ -24,7 +24,7 @@ var Game = {
     var _self = this
     // 加载资源图片, 加载完成交互才开始
     var resources = opts.normalSrc.concat(opts.pressSrc)
-    resources.push(opts.emptySrc, opts.fullSrc, opts.finishbgSrc, opts.againSrc, opts.hanberSrc, opts.nextSrc, opts.brightSrc, opts.greySrc)
+    resources.push(opts.emptySrc, opts.fullSrc, opts.finishbgSrc, opts.againSrc, opts.hanberSrc, opts.nextSrc, opts.brightSrc, opts.greySrc, opts.imgdataSrc)
     var pieceNum = opts.pieceNum
 
     util.resourceOnload(resources, function (images) {
@@ -38,10 +38,24 @@ var Game = {
       opts.nextImg = images[2 * pieceNum + 5]
       opts.brightImg = images[2 * pieceNum + 6]
       opts.greyImg = images[2 * pieceNum + 7]
+      opts.dataImg = images[2 * pieceNum + 8]
       // 创建触摸实例
       _self.touch = new Touch()
+      _self.setImgData();
       _self.play()
     })
+  },
+  setImgData: function(){
+    var imgdataMsg = this.opts.imgdataMsg;
+    context.clearRect(0, 0, this.opts.designW, this.opts.designH);
+    context.drawImage(this.opts.dataImg, imgdataMsg.x, imgdataMsg.y, imgdataMsg.w, imgdataMsg.h);
+    this.opts.imgData = context.getImageData(0, 0, this.opts.designW, this.opts.designH);
+  },
+  /**
+   * 回到初始状态
+   */
+  reset: function(){
+    this.setStatus('start')
   },
   /** 
   * 更新游戏状态
@@ -52,6 +66,7 @@ var Game = {
   },
   play: function () {
     var _self = this
+    this.st = (new Date()).getTime();
     var opts = this.opts
     // 创建分数实例
     this.grade = new Grade(opts);
@@ -69,9 +84,9 @@ var Game = {
       }
       this.pieces[i] = new Piece(opts, opt)
     }
-
+   
     // 开始进行绘画更新
-    console.log('准备开始进行绘画更新')
+    console.log('准备开始进行绘画更新',(new Date()).getTime() - this.st)
     this.update()
   },
   clearAll: function () {
@@ -173,7 +188,6 @@ var Game = {
           }
         } else if (piece.isInArea(sx, sy) && !(piece.isInPath())) {
           //判断是否点钟碎片，如果点中，则设置碎片状态，为点中状态
-          piece.setStatus('press');
           piece.setTouchDis(sx, sy);
           break;
         }
@@ -216,11 +230,13 @@ var Game = {
       piece = this.pieces[i];
       if (piece.isPressed()) {
         pressIndex = i;
+        piece.draw();
       }else if(piece.isInPath()){
         pathIndex = i;
       }else{
         piece.draw();
       }
+      
     }
     if(pathIndex != -1){
       this.pieces[pathIndex].draw();
