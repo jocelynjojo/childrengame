@@ -29,12 +29,14 @@ var Game = {
     var moneyNum = opts.moneySrc.length;
     var conNum = opts.containerSrc.length;
     // 加载
+    this.st = new Date().getTime()
     util.resourceOnload(resources, function (images) {
       opts.moneyImgs = images.slice(0, moneyNum)
       opts.containerImgs = images.slice(moneyNum, conNum + moneyNum)
       opts.dataImg = images[conNum + moneyNum]
       // 创建触摸实例
       _self.touch = new Touch(opts.canvas)
+      console.log('缓存图像完毕，距离开始：', (new Date()).getTime() - _self.st)
       _self.setImgData();
       _self.play()
     })
@@ -61,7 +63,7 @@ var Game = {
   play: function () {
     var _self = this
     // 看创建对象的时间
-    this.st = (new Date()).getTime();
+    console.log('准备创建对象, 获取像素点完毕，距离开始：', (new Date()).getTime() - this.st)
     var opts = this.opts
     // 创建 容器实例
     this.containers = [];
@@ -86,9 +88,9 @@ var Game = {
     }
 
     // 开始进行绘画更新
-    console.log('准备开始进行绘画更新, 创建对象用时：', (new Date()).getTime() - this.st)
+    console.log('创建对象完毕，距离开始：', (new Date()).getTime() - this.st)
     this.update()
-    console.log('初始绘画完毕，用时：', (new Date()).getTime() - this.st)
+    console.log('初始绘画完毕，距离开始：', (new Date()).getTime() - this.st)
   },
   /* 
   * 结束游戏，停止循环
