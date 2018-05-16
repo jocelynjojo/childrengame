@@ -23,29 +23,24 @@ var Game = {
 
     var _self = this
     // 加载资源图片, 加载完成交互才开始
-    var resources = opts.normalSrc.concat(opts.pressSrc)
-    resources.push(opts.emptySrc, opts.fullSrc, opts.finishbgSrc, opts.againSrc, opts.hanberSrc, opts.nextSrc, opts.brightSrc, opts.greySrc, opts.imgdataSrc)
-    var pieceNum = opts.pieceNum
+    var resources = opts.pieceSrc.concat([opts.imgdataSrc, opts.emptySrc, opts.fullSrc])
 
+    var pieceNum = opts.pieceSrc.length;
+    this.st = new Date().getTime();
     util.resourceOnload(resources, function (images) {
-      opts.normalImgs = images.slice(0, pieceNum)
-      opts.pressImgs = images.slice(pieceNum, 2 * pieceNum)
-      opts.emptyImage = images[2 * pieceNum]
-      opts.fullImage = images[2 * pieceNum + 1]
-      opts.finishbgImg = images[2 * pieceNum + 2]
-      opts.againImg = images[2 * pieceNum + 3]
-      opts.hanberImg = images[2 * pieceNum + 4]
-      opts.nextImg = images[2 * pieceNum + 5]
-      opts.brightImg = images[2 * pieceNum + 6]
-      opts.greyImg = images[2 * pieceNum + 7]
-      opts.dataImg = images[2 * pieceNum + 8]
+      opts.pieceImgs = images.slice(0, pieceNum)
+      opts.dataImg = images[pieceNum];
+      opts.emptyImage = images[pieceNum + 1]
+      opts.fullImage = images[pieceNum + 2]
+
+      console.log('缓存图像完毕，距离开始：', (new Date()).getTime() - _self.st)
       // 创建触摸实例
-      _self.touch = new Touch()
+      _self.touch = new Touch(canvas)
       _self.setImgData();
       _self.play()
     })
   },
-  setImgData: function(){
+  setImgData: function () {
     var imgdataMsg = this.opts.imgdataMsg;
     context.clearRect(0, 0, this.opts.designW, this.opts.designH);
     context.drawImage(this.opts.dataImg, imgdataMsg.x, imgdataMsg.y, imgdataMsg.w, imgdataMsg.h);
@@ -54,7 +49,7 @@ var Game = {
   /**
    * 回到初始状态
    */
-  reset: function(){
+  reset: function () {
     this.setStatus('start')
   },
   /** 
@@ -66,48 +61,46 @@ var Game = {
   },
   play: function () {
     var _self = this
-    this.st = (new Date()).getTime();
+    console.log('获取像素点完毕，距离开始：', (new Date()).getTime() - this.st)
     var opts = this.opts
-    // 创建分数实例
-    this.grade = new Grade(opts);
-    // 创建圆形实例
-    this.round = new Round(opts)
 
-    // 创建碎片实例
-    this.pieces = []
-    for (var i = 0, len = opts.pieceNum; i < len; i++) {
-      var opt = {
-        normalMsg: opts.normalMsgs[i],
-        pressMsg: opts.pressMsgs[i],
-        normalImg: opts.normalImgs[i],
-        pressImg: opts.pressImgs[i]
-      }
-      this.pieces[i] = new Piece(opts, opt)
+    // 创建空心圆形实例
+    var o = {
+      img: opts.emptyImage,
+      msg: opts.emptyMsg
     }
-   
+    var opt = util.assign(opts, o)
+    this.round = new Round(opt)
+    // 创建实心原型实例
+    var o = {
+      img: opts.fullImage,
+      msg: opts.fullMsg
+    }
+    var opt = util.assign(opts, o)
+    this.roundfull = new Round(opt)
+    // 创建碎片实例
+    this.pieces = [], this.upfinish = []
+    for (var i = 0, len = opts.pieceSrc.length; i < len; i++) {
+      var o = {
+        msg: opts.pieceMsgs[i],
+        img: opts.pieceImgs[i]
+      }
+      var opt = util.assign(opts, o)
+      this.upfinish[i] = this.pieces[i] = new Piece(opt)
+    }
+
     // 开始进行绘画更新
-    console.log('准备开始进行绘画更新',(new Date()).getTime() - this.st)
+    console.log('创建对象完毕，距离开始', (new Date()).getTime() - this.st)
+    this.total = opts.pieceSrc.length;
+    this.finish = 0;
     this.update()
-  },
-  clearAll: function () {
-    this.clearUpdate();
-    this.grade.clearAll();
-    this.grade = null;
-  },
-  clearUpdate: function () {
-    this.round = null;
-    this.pieces = [];
-    this.touch.reset();
+    console.log('初次绘画完毕，距离开始：', (new Date()).getTime() - this.st)
   },
   /* 
   * 结束游戏，停止循环
   */
   end: function () {
-    context.clearRect(0, 0, this.opts.designW, this.opts.designH)
-    this.round.setStatus('full')
-    this.touch.releaseEvent()
-    this.lastDraw();
-    this.clearUpdate();
+    console.log('end')
   },
   /**
    * game 被触发什么事件
@@ -115,23 +108,6 @@ var Game = {
    * @param {Object} extra 传参对象
    */
   trigger: function (type, extra) {
-    if (type == 'tap') {
-      this.tabEvent(extra)
-    }
-  },
-  tabEvent: function (extra) {
-
-    if (this.isEnd()) {
-      var x = extra.tapx;
-      var y = extra.tapy;
-      x = x / clientWidth * this.opts.designW
-      y = y / clientHeight * this.opts.designH
-      if (this.grade.isInAgain(x, y)) {
-        this.setStatus('start')
-        this.clearAll();
-        this.play();
-      }
-    }
   },
   /*
   * 游戏每一帧的更新函数
@@ -158,9 +134,7 @@ var Game = {
   * 更新碎片对象
   */
   updatePieces: function () {
-    var total = this.opts.pieceNum
-    var finish = 0
-    var piece
+
     var sx = this.touch.startX
     var sy = this.touch.startY
     sx = sx / clientWidth * this.opts.designW
@@ -173,72 +147,80 @@ var Game = {
     var ey = this.touch.endY
     ex = ex / clientWidth * this.opts.designW
     ey = ey / clientHeight * this.opts.designH
-    if (!sx && !sy && !mx && !my) {
+    // 手指不触碰的时候，并且手指未触碰过 或者 触碰了 (0,0)的地方则 返回
+    if (!this.touch.isTouchStart && !sx && !sy) {
       return;
     }
-    // 判断手指是否在点击canvas
-    if (this.touch.isTouchStart) {
-      for (var i = 0; i < total; i++) {
-        piece = this.pieces[i]
-        // 是否碎片已经是点中状态
-        if (piece.isPressed()) {
-          if (this.touch.isTouchMove) {
-            // 如果手指进行了移动，则移动碎片设置碎片位置，否则不作为
-            piece.setLoc(mx, my);
-          }
-        } else if (piece.isInArea(sx, sy) && !(piece.isInPath())) {
-          //判断是否点钟碎片，如果点中，则设置碎片状态，为点中状态
-          piece.setTouchDis(sx, sy);
-          break;
-        }
+    // this.upfinish 是否还有对象, 没有对象则游戏结束
+    var total = this.upfinish.length;
+    var piece;
+    // 循环upfinish 对象，看是否有已经消失掉的
+    for (var i = 0; i < total; i++) {
+      piece = this.upfinish[i];
+      if (piece.isInEnd()) {
+        this.upfinish.splice(i, 1);
+        total--;
+        i--;
       }
-    } else {
-      //如果没有点击 1、一直没有点击则不作为， 2 手指放开，碎片恢复或移动到终点
-      var finishIndex = -1;
-      for (var i = 0; i < total; i++) {
-        piece = this.pieces[i]
-        piece.setStatus('normal');
-        //如果碎片在终点
-        if (piece.isInTheEnd()) {
-          finish++;
-          if (finish == total) {
-            this.setStatus('end');
-          }
-        } else if (!(piece.isInStart())) {
-          // 如果碎片不在终点也不在起点， 判断手指所在的位置是否到达 圆圈内
-          if (piece.hasPath()) {
-            piece.translate()
-          } else {
-            if (this.round.isInArea(ex, ey)) {
-              piece.createPath(ex, ey, 'end')
-
-            } else {
-              piece.createPath(ex, ey, 'start')
-            }
-          }
-        }
-      }
-
     }
+    // this.upfinish 是否还有对象, 没有对象则游戏结束
+    if (!total) {
+      this.setStatus('end');
+      return;
+    }
+    
+    // 在 piece 前一次的各种状态下对它进行这次操作 // 开始状态，触碰状态，释放状态，目的地状态
+    for (var i = 0; i < total; i++) {
+      piece = this.upfinish[i]
+      if (piece.isInStart()) {
+        // 前次开始状态下，这次如果被点中触碰击态
+        if (this.touch.isTouchStart && piece.isInArea(sx, sy)) {
+          piece.setTouchLoc(sx, sy);
+        }
+      } else if (piece.isInTouch()) {
+        // 前次触碰状态下，这次如果释放，变释放态或到目的地态，若一直触碰并移动，则跟着触碰设置位置
+        if (this.touch.isTouchStart && this.touch.isTouchMove) {
+          piece.setMoveLoc(mx, my);
+        } else if (!this.touch.isTouchStart) {
+          // 触碰刚释放，需要看释放在什么位置；
+          if (this.round.isInArea(ex, ey)) {
+            piece.createPath('end')
+          } else {
+            piece.createPath('start')
+          }
+        }
+      } else if (piece.isInRelease()) {
+        // 前次释放状态下，如果回到初始态或结束态，否则继续移动 
+        piece.step();
+      } else if (piece.isInEnd()) {
+        continue;
+      } else {
+        continue;
+      }
+    }
+    
   },
   draw: function () {
+    if(this.isEnd()){
+      this.roundfull.draw();
+      return;
+    }
     // 先画圈的背景
     this.round.draw()
     // 再画碎片
     var piece, pressIndex = -1, pathIndex = -1;
     for (var i = 0, len = this.pieces.length; i < len; i++) {
       piece = this.pieces[i];
-      if (piece.isPressed()) {
+      if (piece.isInTouch()) {
         pressIndex = i;
-        piece.draw();
-      }else if(piece.isInPath()){
+      } else if (piece.isInRelease()) {
         pathIndex = i;
-      }else{
+      } else {
         piece.draw();
       }
-      
+
     }
-    if(pathIndex != -1){
+    if (pathIndex != -1) {
       this.pieces[pathIndex].draw();
     }
     if (pressIndex != -1) {
@@ -246,10 +228,7 @@ var Game = {
     }
 
   },
-  lastDraw: function () {
-    this.draw();
-    this.grade.draw(this.opts.starNum);
-  },
+
   /**
    * 判断游戏是否结束
    */

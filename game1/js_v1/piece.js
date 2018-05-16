@@ -1,178 +1,154 @@
 /**
  * 子类 碎片
  */
-var Piece = function (opts, speOpt) {
+var Piece = function (opts) {
     var opts = opts || {}
     Ele.call(this, opts);
-    // 设置坐标和尺寸
-    this.normalMsg = speOpt.normalMsg  || {};
-    this.pressMsg = speOpt.pressMsg  || {}; 
-    this.colorR = this.normalMsg.r;
-    this.colorG = this.normalMsg.g;
-    this.colorB = this.normalMsg.b;
-    this.colorA = this.normalMsg.a;
-    this.imgData = opts.imgData;
+    // 自由运动最多运动的次数
+    this.maxTime = this.opts.maxTime;
+    // 在没到达最多运动次数的情况下他的速度
+    this.speed = this.opts.speed;
 
-    // 自由移动相关的属性
-    this.toEndSpeed = opts.toEndSpeed; // 碎片自由移动到结尾的速度
-    this.toStartSpeed = opts.toStartSpeed; // 碎片自由移动到开头的速度
-    this.maxTime = opts.maxTime; 
+    // 自动运动的路径, 和这条路径上面运动的次数
+    this.pathMsg = null;
+    this.moveTime = 0;
+    // 被移动时移动Piece 的点 到Piece边界的距离
+    this.disx = 0;
+    this.disy = 0;
 
-    // 特有属性 当前状态  'normal', 'press'
-    this.status = 'normal';
-    this.normalImg = speOpt.normalImg;
-    this.pressImg = speOpt.pressImg;
-    
-    // 当前的位置
-    this.moveTo(this.normalMsg.startx, this.normalMsg.starty);
-    
-    // 记录被点中时刻的，被点的位置和碎片左边缘位置和上边缘的距离
-    this.touchdisx;
-    this.touchdisy;
-    // 记录手指离开时刻碎片的位置
-    this.releasex;
-    this.releasey;
-    // 记录自动移动的路径
-    this.linear;
-    this.moveTime = 0; // 在这条路径上移动的次数
+    // 设置状态
+    this.setStatus('start');
 }
 util.inHeritObject(Ele, Piece);
-/** 
- * 根据存在的路径移动
-*/
-
-Piece.prototype.translate = function(direction){
-    // 如果路径没创建， 或者已经完成则返回
-    if(!this.isInPath()){
-        return;
-    }
-    // 否则，移动一步
-    var tox, toy;
-    this.moveTime ++;
-    if(this.moveTime == this.linear.times){
-        tox = this.linear.tox;
-        toy = this.linear.toy;
-        this.linear = null;
-    }else{
-        tox = this.linear.speedx * this.moveTime + this.linear.fromx;
-        toy = this.linear.speedy * this.moveTime + this.linear.fromy;
-    }
-    this.moveTo(tox, toy);
-}
-
-// 方法draw
-Piece.prototype.draw = function(){
-    // 绘制碎片
-    switch(this.status){
-        case 'normal':
-        case 'press':
-            context.drawImage(this.pressImg, this.px, this.py, this.pressMsg.w, this.pressMsg.h);
-            break;
-        case 'end':
-            context.drawImage(this.normalImg, this.x, this.y, this.normalMsg.w, this.normalMsg.h);
-            break;
-    }
-    return this;
+/**
+ * 画出带阴影的piece
+ * @param {number} shadow 阴影颜色的值
+ * @param {number} size 阴影大小的值
+ */
+Piece.prototype.drawShadow = function (shadow, size) {
+    var ctx = this.ctx;
+    ctx.save();
+    ctx.shadowOffsetX = 5; // 阴影Y轴偏移
+    ctx.shadowOffsetY = 5; // 阴影X轴偏移
+    ctx.shadowBlur = size || 70; // 模糊尺寸
+    var color = shadow || 0.6;
+    ctx.shadowColor = 'rgba(0, 0, 0, ' + color + ')'; // 颜色
+    ctx.drawImage(this.img, this.x, this.y, this.w, this.h);
+    ctx.restore();
 }
 
 /**
- * 设置碎片状态
- * @param {String} status // 'normal', 'press','end'
+ * 画出碎片
  */
-Piece.prototype.setStatus = function(status){
+Piece.prototype.draw = function () {
+    if (this.isInTouch()) {
+        this.drawShadow(0.95, 100);
+    } else if (this.isInStart() || this.isInRelease()) {
+        this.drawShadow(0.8, 80);
+    } else {
+        this.ctx.drawImage(this.img, this.x, this.y, this.w, this.h);
+    }
+}
+/**
+ * @param {string} status 状态 'start', 'touch', 'release', 'end'
+ */
+Piece.prototype.setStatus = function (status) {
     this.status = status;
 }
+
 /**
- * 判断碎片是否到达了他终端的位置, 如果到达了，设置为true， 并设置状态为 'end'
+ * 设置Piece 被触碰的点 到 边距的距离, 设置距离说明开始触碰
+ * @param {number} x canvas上面被触碰的的x
+ * @param {number} y canvas上面被触碰的的y
  */
-Piece.prototype.isInTheEnd = function(){
-    var bool = (this.x == this.normalMsg.endx) && (this.y == this.normalMsg.endy);
-    if(bool){
-        this.setStatus('end');
+Piece.prototype.setTouchLoc = function (x, y) {
+    this.setStatus('touch');
+    this.disx = Math.floor(x - this.x);
+    this.disy = Math.floor(y - this.y);
+}
+/**
+ * 让Piece运动到（x,y) 这个位置
+ * @param {number} x canvas上面的x
+ * @param {number} y canvas上面的y
+ */
+Piece.prototype.setMoveLoc = function (x, y) {
+    this.x = Math.floor(x - this.disx);
+    this.y = Math.floor(y - this.disy);
+}
+/**
+ * 创建 Piece 自动 回到开始位置的路径信息，包括两头的位置，运动时间和速度, 创建路径说明开始释放
+ * @param {String} direction 'start' 往开始方向， 'end' 往结束方向
+ */
+Piece.prototype.createPath = function (direction) {
+    this.setStatus('release');
+    var targetx = this.endx;
+    var targety = this.endy;
+    if (direction == 'start') {
+        targetx = this.startx;
+        targety = this.starty;
     }
-    return bool;
+    var minusx = targetx - this.x;
+    var minusy = targety - this.y;
+    var pathLen = Math.sqrt(Math.pow(minusx, 2) + Math.pow(minusy, 2));
+    var speedx, speedy;
+    var times = Math.ceil(pathLen / this.speed);
+    if (times > this.maxTime) {
+        // 如果路径太长导致运动次数太多，则提速, 减少次数到this.maxTime
+        times = this.maxTime;
+    }
+    var dirx = minusx / Math.abs(minusx);
+    var diry = minusy / Math.abs(minusy);
+    speedx = Math.ceil(Math.abs(minusx) / times) * dirx;
+    speedy = Math.ceil(Math.abs(minusy) / times) * diry;
+    this.pathMsg = { endx: targetx, endy: targety, speedx: speedx, speedy: speedy, times: times, status: direction };
 }
 /**
- * 判断碎片是否离开起点
+ * 在创建路径之后走的每一步
  */
-Piece.prototype.isInStart = function(){
-    return (this.x == this.normalMsg.startx) && (this.y == this.normalMsg.starty)
+Piece.prototype.step = function () {
+    if (this.pathMsg) {
+        this.moveTime++;
+        if (this.moveTime >= this.pathMsg.times) {
+            // 运动次数足够，说明这次运动完成后可以结束这条路径
+            this.x = this.pathMsg.endx;
+            this.y = this.pathMsg.endy;
+            this.setStatus(this.pathMsg.status);
+            this.clearPath();
+        } else {
+            this.x += this.pathMsg.speedx;
+            this.y += this.pathMsg.speedy;
+        }
+    }
 }
 /**
- * 判断碎片是否处于press状态
+ * 清除创建的路径
  */
-Piece.prototype.isPressed = function(){
-    return this.status == 'press'
-}
-/**
- * 设置碎片被点中时刻，被点的位置和碎片左边缘位置的距离，当设置被点中时刻的时候，碎片状态设置为'press'
- * @param {number} sx 手指的点击位置x 所转化成的canvas 的x
- * @param {number} sy 手指的点击位置y 所转化成的canvas 的y
- */
-Piece.prototype.setTouchDis = function(sx, sy){
-    this.setStatus('press');
-    this.touchdisx = sx - this.x;
-    this.touchdisy = sy - this.y;
-}
-/**
- * 根据手指移动位置，直接设置碎片位置
- * @param {number} mx 手指的移动位置x 所转化成的canvas 的x
- * @param {number} my 手指的移动位置x 所转化成的canvas 的y
- */
-Piece.prototype.setLoc = function(mx, my){
-    this.moveTo(mx - this.touchdisx, my - this.touchdisy);
+Piece.prototype.clearPath = function () {
+    this.pathMsg = null;
+    this.moveTime = 0;
 }
 
 /**
- * 记录手指停下的位置和目标位置路径
- * @param {number} ex 手指的停下位置x 所转化成的canvas 的x
- * @param {number} ey 手指的停下位置x 所转化成的canvas 的y
- * @param {String} direction 'start' 往开始方向， 'end' 往结束方向
+ * 判断是否被触碰状态
  */
-Piece.prototype.createPath = function(ex, ey, direction){
-    var fromx = ex - this.touchdisx;
-    var fromy = ey - this.touchdisy;
-    var tox = this.normalMsg.endx;
-    var toy = this.normalMsg.endy;
-    var speed = this.toEndSpeed;
-    if(direction == 'start'){
-        tox = this.normalMsg.startx;
-        toy = this.normalMsg.starty;
-        speed = this.toStartSpeed;
-    }
-    var disy = toy - fromy;
-    var disx = tox - fromx;
-    // 公式 y = k * x + b;
-    // var k = disy / disx;
-    // var b = fromy - k * fromx;
-    var length = Math.sqrt(Math.pow(disy,2)+Math.pow(disx,2));// 路径长度
-    var times = Math.ceil(length / speed); //要走的次数
-    times = times > this.maxTime? this.maxTime : times;
-    var speedx = disx / times; // 横坐标的速度
-    var speedy = disy / times; // 纵坐标的速度
-    this.linear = {fromx:fromx, fromy:fromy, tox:tox, toy:toy, speedx:speedx, speedy:speedy, times:times}
-    this.moveTime = 0; // 创建完就开始自动一动
+Piece.prototype.isInTouch = function () {
+    return this.status == 'touch'
 }
 /**
- * 判断碎片是否还在自动移动中
+ * 判断是否回到开始状态
  */
-Piece.prototype.isInPath = function(){
-    return this.linear && (this.moveTime < this.linear.times);
+Piece.prototype.isInStart = function () {
+    return this.status == 'start'
 }
 /**
- * 判断碎片是否创建了路径
+ * 判断是否释放状态
  */
-Piece.prototype.hasPath = function(){
-    return this.linear;
+Piece.prototype.isInRelease = function () {
+    return this.status == 'release'
 }
 /**
- * moveTo 函数 根据给的 x, y值进行移动
- * @param {number} x 碎片要去到的位置
- * @param {number} y 碎片要去到的位置
+ * 判断是到达结尾
  */
-Piece.prototype.moveTo = function(x, y){
-    this.x = x;
-    this.y = y;
-    this.px = this.x + this.pressMsg.disx;
-    this.py = this.y + this.pressMsg.disy;
+Piece.prototype.isInEnd = function () {
+    return this.status == 'end'
 }

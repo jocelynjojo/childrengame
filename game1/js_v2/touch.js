@@ -29,6 +29,7 @@ Touch.prototype = {
     startTime: 0,
     touchStart: function (event) {
         var event = event || window.event;
+        this.startTime = new Date().getTime();
         this.startX = event.touches[0].clientX;
         this.startY = event.touches[0].clientY;
         this.isTouchStart = true;
@@ -49,7 +50,12 @@ Touch.prototype = {
         this.endY = event.changedTouches[0].clientY;
         this.isTouchStart = false;
         this.isTouchMove = false;
-
+        var nowTime = new Date().getTime();
+        if(nowTime - this.startTime < 200){
+            Game.trigger('tap',{tapx:this.endX, tapy:this.endY});
+        }
+        this.startTime = 0;
+        // console.log('touchend', this.endX, this.endY)
     },
     reset: function () {
         this.startX = 0;
