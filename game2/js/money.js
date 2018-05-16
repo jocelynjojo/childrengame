@@ -4,8 +4,7 @@ function Money(opts) {
     this.maxTime = this.opts.maxTime;
     // 在没到达最多运动次数的情况下他的速度
     this.speed = this.opts.speed;
-    // 类型：coin\paper
-    this.type = this.opts.msg.type;
+
     // 自动运动的路径, 和这条路径上面运动的次数
     this.pathMsg = null;
     this.moveTime = 0;
@@ -17,16 +16,17 @@ function Money(opts) {
     // 设置状态
     this.setStatus('start');
 }
+util.inHeritObject(Ele, Money);
 /**
  * 画出带阴影的钱
  */
 Money.prototype.drawShadow = function () {
     var ctx = this.ctx;
     ctx.save();
-    ctx.shadowOffsetX = 15; // 阴影Y轴偏移
-    ctx.shadowOffsetY = 15; // 阴影X轴偏移
-    ctx.shadowBlur = 14; // 模糊尺寸
-    ctx.shadowColor = 'rgba(0, 0, 0, 0.5)'; // 颜色
+    ctx.shadowOffsetX = 5; // 阴影Y轴偏移
+    ctx.shadowOffsetY = 5; // 阴影X轴偏移
+    ctx.shadowBlur = 70; // 模糊尺寸
+    ctx.shadowColor = 'rgba(0, 0, 0, 0.6)'; // 颜色
     ctx.drawImage(this.img, this.x, this.y, this.w, this.h);
     ctx.restore();
 }
@@ -36,7 +36,10 @@ Money.prototype.drawShadow = function () {
 Money.prototype.drawOpacity = function () {
     var ctx = this.ctx;
     ctx.save();
-    ctx.globalAlpha = 0.1;
+    var times = this.opts.disappearTime;
+    this.disappearTime;
+
+    ctx.globalAlpha = (times - this.disappearTime) / times;
     ctx.drawImage(this.img, this.x, this.y, this.w, this.h);
     ctx.restore();
 }
@@ -44,12 +47,12 @@ Money.prototype.drawOpacity = function () {
  * 画出钱
  */
 Money.prototype.draw = function () {
-    if (this.status == 'touch') {
+    if (this.isInTouch()) {
         this.drawShadow();
-    } else if (this.status == 'end') {
+    } else if (this.isInEnd() || this.isDisappear()) {
         this.drawOpacity();
     } else {
-        ctx.drawImage(this.img, this.x, this.y, this.w, this.h);
+        this.ctx.drawImage(this.img, this.x, this.y, this.w, this.h);
     }
 }
 /**
@@ -73,15 +76,16 @@ Money.prototype.setTouchLoc = function (x, y) {
  * @param {number} x canvas上面的x
  * @param {number} y canvas上面的y
  */
-Money.prototype.setLoc = function (x, y) {
-    this.x = Math.floor(x);
-    this.y = Math.floor(y);
+Money.prototype.setMoveLoc = function (x, y) {
+    this.x = Math.floor(x - this.disx);
+    this.y = Math.floor(y - this.disy);
 }
 
 /**
  * 创建 Money 自动 回到开始位置的路径信息，包括两头的位置，运动时间和速度, 创建路径说明开始释放
  */
 Money.prototype.setBackPath = function () {
+    this.setStatus('release');
     var minusx = this.startx - this.x;
     var minusy = this.starty - this.y;
     var pathLen = Math.sqrt(Math.pow(minusx, 2) + Math.pow(minusy, 2));
@@ -108,8 +112,8 @@ Money.prototype.step = function () {
             // 运动次数足够，说明这次运动完成后可以结束这条路径
             this.x = this.pathMsg.endx;
             this.y = this.pathMsg.endy;
-            this.pathMsg = null;
-            this.moveTime = 0;
+            this.clearPath();
+            this.setStatus('start');
         } else {
             this.x += this.pathMsg.speedx;
             this.y += this.pathMsg.speedy;
@@ -117,26 +121,57 @@ Money.prototype.step = function () {
     }
 }
 /**
- * 让他自由移动回到原点
+ * 清除创建的路径
  */
-Money.prototype.autoMoveBack = function (type) {
-    if (!this.isInStart()) {
-        if (this.pathMsg) {
-            this.step();
-        } else {
-            this.setBackPath();
-        }
-    }
+Money.prototype.clearPath = function () {
+    this.pathMsg = null;
+    this.moveTime = 0;
+}
+/**
+ * 到达container 做的事情
+ */
+Money.prototype.doInContainer = function(){
+    this.disappearTime++;
+    this.setStatus('end')
 }
 /**
  * 让他自己消失
  */
-Money.prototype.disappear = function (type) {
+Money.prototype.toDisappear = function (type) {
     var times = this.opts.disappearTime;
     this.disappearTime++;
-    this.setStatus('end')
     if (this.disappearTime >= times) {
         // 让他完全消失掉
         this.setStatus('disappear')
     }
+}
+/**
+ * 判断是否已经消失
+ */
+Money.prototype.isDisappear = function () {
+    return this.status == 'disappear'
+}
+/**
+ * 判断是否被触碰状态
+ */
+Money.prototype.isInTouch = function () {
+    return this.status == 'touch'
+}
+/**
+ * 判断是否回到开始状态
+ */
+Money.prototype.isInStart = function () {
+    return this.status == 'start'
+}
+/**
+ * 判断是否释放状态
+ */
+Money.prototype.isInRelease = function () {
+    return this.status == 'release'
+}
+/**
+ * 判断是到达结尾准备消失状态
+ */
+Money.prototype.isInEnd = function () {
+    return this.status == 'end'
 }

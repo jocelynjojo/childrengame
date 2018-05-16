@@ -6,12 +6,13 @@ var Ele = function (opts) {
     this.y = this.starty = msg.y || msg.starty;
     this.w = msg.w;
     this.h = msg.h;
-    
+    // 对应类型
+    this.type = msg.type;
     // 对应的颜色
-    this.colorR = msg.colorR;
-    this.colorG = msg.colorG;
-    this.colorB = msg.colorB;
-    this.colorA = msg.colorA;
+    this.colorR = msg.r;
+    this.colorG = msg.g;
+    this.colorB = msg.b;
+    this.colorA = msg.a;
     this.img = opts.img;
     this.ctx = opts.context;
     // canvas上面所有像素点的集合
@@ -41,9 +42,10 @@ Ele.prototype.isInArea = function (x, y) {
 
 /**
  * 判断该元素当前的位置是否是它开始的位置，也就是说是否在可点击位置
+ * 默认返回true（对应禁止的元素），运动的元素重写此方法
  */
 Ele.prototype.isInStart = function () {
-    return (this.x == this.startx) && (this.y == this.starty);
+    return true;
 }
 
 /**

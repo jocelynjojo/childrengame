@@ -2,13 +2,12 @@ var Config = {
     designW: 2048,
     designH: 1536,
     canvas:document.getElementById('canvas'),
-    imgdataSrc: 'images/imgdata.jpg',
+    imgdataSrc: 'images/imgdata.png',
     imgdataMsg: {w:1420, h:1335, x:225, y:159},
-    coinSrc: 'images/cointarget.png',
-    paperSrc: 'images/papertarget.png',
-    coinMsg: {w:389,h:549,x:1226,y:917, r:200, g:200, b:200, a:255},
-    paperMsg: {w:657,h:557,x:270,y:928, r:180, g:200, b:200, a:255},
-    moneyNum: 8,
+    containerSrc: ['images/cointarget.png','images/papertarget.png'],
+    containerMsg: [{w:389,h:549,x:1226,y:917, r:180, g:200, b:200, a:255, type:'coin'},
+        {w:657,h:557,x:270,y:928, r:200, g:200, b:200, a:255, type:'paper'}
+    ],
     moneySrc: ['images/money1.png', 
     'images/money2.png', 
     'images/money3.png', 
@@ -17,18 +16,18 @@ var Config = {
     'images/money6.png',
     'images/money7.png',
     'images/money8.png'],
-    moneyMsgs: [{w:255, h:259, startx:294, starty:283, r:180, g:180, b:160, a:255},
-    {w:226, h:226, startx:688, starty:159, r:160, g:180, b:180, a:255},
-    {w:199, h:199, startx:1081, starty:283, r:180, g:180, b:180, a:255},
-    {w:233, h:238, startx:1442, starty:199, r:180, g:200, b:180, a:255},
-    {w:333, h:177, startx:255, starty:565, r:200, g:180, b:180, a:255},
-    {w:179, h:179, startx:735, starty:459, r:180, g:180, b:200, a:255},
-    {w:333, h:177, startx:892, starty:695, r:200, g:180, b:200, a:255},
-    {w:333, h:177, startx:1321, starty:581, r:200, g:200, b:180, a:255}],
+    moneyMsgs: [{w:255, h:259, startx:294, starty:283, r:180, g:180, b:160, a:255, type:'coin'},
+    {w:226, h:226, startx:688, starty:159, r:160, g:180, b:180, a:255, type:'coin'},
+    {w:199, h:199, startx:1081, starty:283, r:180, g:180, b:180, a:255, type:'coin'},
+    {w:233, h:238, startx:1442, starty:199, r:180, g:200, b:180, a:255, type:'coin'},
+    {w:333, h:177, startx:255, starty:565, r:200, g:180, b:180, a:255, type:'paper'},
+    {w:179, h:179, startx:735, starty:459, r:180, g:180, b:200, a:255, type:'coin'},
+    {w:333, h:177, startx:892, starty:695, r:200, g:180, b:200, a:255, type:'paper'},
+    {w:333, h:177, startx:1321, starty:581, r:200, g:200, b:180, a:255, type:'paper'}],
     
     speed: 80, // 释放时候碎片的速度
     maxTime: 5, //对应的速度最多能次数，大于这个次数，需要提速
-    disappearTime:3 //到 终点持续ji秒之后消失
+    disappearTime:10 //到 终点持续ji秒之后消失
 }
 function reConfig(obj) {
     var canvas = obj.canvas;
