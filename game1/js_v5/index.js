@@ -166,9 +166,9 @@ var Game = {
     if (this.isEnd()) {
       this.end()
     } else {
-      requestAnimFrame(function () {
+      setTimeout(function () {
         _self.update()
-      })
+      }, 1000/60)
     }
   },
   /*
