@@ -73,7 +73,14 @@ var util = {
         }
         return obj;
     },
-
+    setFontSize: function(opts){
+        var designW = opts.designW;
+        var designFS = opts.designFS;
+        var html = document.getElementsByTagName('html')[0];
+        var clientWidth = html.clientWidth;
+        var fs = designFS / designW * clientWidth;
+        html.style.fontSize = fs + 'px';
+    }
 }
 
 

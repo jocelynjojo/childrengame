@@ -1,6 +1,7 @@
 var Config = {
     designW: 2048,
     designH: 1536,
+    designFS: 100,
     animals: ['images/mouse.png', 'images/cattle.png', 'images/tiger.png', 'images/rabbit.png',
         'images/dragon.png', 'images/snake.png', 'images/horse.png', 'images/sheep.png',
         'images/monkey.png', 'images/chicken.png', 'images/dog.png', 'images/pig.png'],
@@ -47,11 +48,21 @@ var Config = {
                 { x: 1714, y: 409, w: 113, h: 160, name: 'bird2' },
                 { x: 1697, y: 562, w: 128, h: 145, name: 'gift' }
             ]
-
+        },
+        level5: {
+            base: { x: 1368, y: 246, w: 91, h: 91, name: 'grey' }
+        },
+        level6: {
+            base: { x: 1323, y: 9, w: 91, h: 91, name: 'grey' }
         }
     },
-    allNum: 5,
+    allNum: 7,
     now: [],
+    /**
+     * @param {number} passL 通过第几关 
+     * @param {src} user 用户头像
+     * @param {number} index 用户生效
+     */
     init: function (passL, user, index) {
         this.level = passL;
         // 定义小鸟
@@ -63,9 +74,8 @@ var Config = {
                 this.srcs.user = user;
                 this.now.push({ disx: 40, disy: -85, w: 116, h: 116, name: 'user' })
                 this.srcs.animal = this.animals[index];
-                this.now.push({ disx: 99, disy: -85, w: 128, h: 88, name: 'animal' })
+                this.now.push({ disx: 99, disy: -135, w: 128, h: 88, name: 'animal' })
                 break;
         }
     }
 }
-Config.init(0, 'images/user.png', 4)
