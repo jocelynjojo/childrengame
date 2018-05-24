@@ -86,12 +86,12 @@ var Game = {
     gradewp.addEventListener('touchstart', function (event) {
       var target = event.target;
       var id = target.id;
-      if(target.id == 'js-again'){
+      if (target.id == 'js-again') {
         self.reset();
         self.play();
-      }else if(target.id == 'js-hanber'){
+      } else if (target.id == 'js-hanber') {
         console.log('hanber')
-      }else if(target.id == 'js-next'){
+      } else if (target.id == 'js-next') {
         console.log('next')
       }
     }, { passive: true })
@@ -135,7 +135,7 @@ var Game = {
   /**
    * 告诉后台过了这关
    */
-  sendPass: function(){
+  sendPass: function () {
     // Ajax.post({
     //   url: ''
     // })
@@ -244,19 +244,15 @@ var Game = {
       } else if (piece.isInRelease()) {
         // 前次释放状态下，如果回到初始态或结束态，否则继续移动 
         piece.step()
-        if (piece.isInRelease()) {
-          this.releaseNum++;
-        } else if (piece.isInEnd()) {
-          this.upfinish.splice(i, 1)
-          total--
-          i--
-          if (!total) {
-            this.setStatus('end')
-            return
-          }
-        }
+        this.releaseNum++;
       } else if (piece.isInEnd()) {
-        continue
+        this.upfinish.splice(i, 1)
+        total--
+        i--
+        if (!total) {
+          this.setStatus('end')
+          return
+        }
       } else {
         continue
       }
@@ -300,6 +296,6 @@ var Game = {
 // 改变根的字体大小
 util.setFontSize(Config);
 // 改变初始配置
-// reConfig(Config);
+reConfig(Config);
 // 初始化
 Game.init()

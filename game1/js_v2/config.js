@@ -110,4 +110,3 @@ function changeObj(obj, minus, str) {
 
 }
 
-reConfig(Config);
