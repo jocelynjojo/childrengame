@@ -17,8 +17,13 @@ var Piece = function (opts) {
     this.disy = 0;
     // 独有的点击状态
     this.pmsg = this.opts.pmsg; //{w:337, h:446, disx:-56, disy:-48}
-    this.pimg = this.opts.pimg
+    this.pimg = this.opts.pimg;
     this.setXY(this.x, this.y);
+    this.pcan = document.createElement('canvas');
+    this.pcan.width = this.pmsg.w;
+    this.pcan.height = this.pmsg.h;
+    var pctx = this.pcan.getContext('2d')
+    pctx.drawImage(this.pimg, 0, 0, this.pmsg.w, this.pmsg.h);
     // 设置状态
     this.setStatus('start');
 }
@@ -37,9 +42,9 @@ Piece.prototype.setXY = function(x,y){
 Piece.prototype.draw = function () {
     if (this.isInStart()) {
         // this.drawShadow(0.8, 80);
-        this.ctx.drawImage(this.pimg, this.px, this.py, this.pmsg.w, this.pmsg.h);
+        this.ctx.drawImage(this.pcan, this.px, this.py);
     } else {
-        this.ctx.drawImage(this.can, this.x, this.y, this.w, this.h);
+        this.ctx.drawImage(this.can, this.x, this.y);
     }
 }
 /**
