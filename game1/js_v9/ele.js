@@ -18,8 +18,6 @@ var Ele = function (opts) {
     var ctx = this.can.getContext('2d')
     ctx.drawImage(this.img, 0, 0,this.w, this.h);
     
-    // canvas上面所有像素点的集合
-    // this.imgData = opts.imgData;
 }
 
 /** 
