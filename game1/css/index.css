@@ -38,4 +38,56 @@ html,body{
     color: #000;
     background: url('../images/finishbg.png') 0 0 no-repeat;
     background-size: 100%;
+    display: none;
+}
+.starswp{
+    margin-top: 2.1rem;
+    text-align: center;
+    font-size: 0;
+}
+.star {
+    width: 1.46rem;
+    height: 1.43rem;
+    background: url('../images/star_gray.png') 0 0 no-repeat;
+    background-size: 100%;
+    display: inline-block;
+    vertical-align: top;
+    margin-left: 0.36rem;
+    margin-right: 0.36rem;
+}
+.gradewp.js-star1 .star1,.gradewp.js-star2 .star1,.gradewp.js-star3 .star1{
+    background-image: url('../images/star_bright.png');
+}
+.gradewp.js-star2 .star2,.gradewp.js-star3 .star2{
+    background-image: url('../images/star_bright.png');
+}
+.gradewp.js-star3 .star3{
+    background-image: url('../images/star_bright.png');
+}
+.btnwp {
+    margin-top: 1.12rem;
+    text-align: center;
+    font-size: 0;
+}
+.btn{
+    display: inline-block;
+    vertical-align: top;
+    background: url('../images/btn_again.png') 0 0 no-repeat;
+    background-size: 100%;
+}
+.btn.again{
+    width: 2.03rem;
+    height: 1.07rem;
+}
+.btn.hanber{
+    width: 2.03rem;
+    height: 1.13rem;
+    margin-left: 0.3rem;
+    margin-right: 0.16rem;
+    background-image: url('../images/btn_hanber.png');
+}
+.btn.next{
+    width: 2.10rem;
+    height: 1.13rem;
+    background-image: url('../images/btn_next.png');
 }
