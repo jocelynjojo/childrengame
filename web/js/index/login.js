@@ -3,10 +3,20 @@ var loginForm = {
         this.addEvent()
     },
     addEvent: function () {
+        var n = document.getElementById('js-name');
+        var p = document.getElementById('js-pass');
         var r = document.getElementById('js-login');
         r.addEventListener('touchstart', function (event) {
-            console.log('login')
-        }, { passive: true });
+            event.preventDefault();
+            var data = {
+                "UserName": n.value,
+                "Password": p.value
+            }
+            // Ajax.post({
+            //     url:''
+            // })
+            console.log('login', data)
+        }, { passive: false });
     }
 }
 var Config = {
