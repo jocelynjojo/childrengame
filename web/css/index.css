@@ -215,3 +215,67 @@ canvas {
     height: 1.78rem;
     margin-top: 0.2rem;
 }
+/*login.html  */
+.login-fromwp{
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 10;
+    display: flex;
+    display: -webkit-flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    
+}
+.login-form{
+    width: 9.4rem;
+    font-size: 0;
+    margin-top: 0.64rem;
+    margin-bottom: 3rem;
+}
+.login-txt:first-child{
+    margin-top: 0;
+}
+.login-txt{
+    width: 100%;
+    height: 0.9rem;
+    line-height: 0.9rem;
+    border: none;
+    background: rgba(255,255,255,0.3);
+    color: #fff;
+    box-sizing: border-box;
+    padding: 0 0.34rem;
+    font-size: 0.42rem;
+    border-radius: 5px;
+    margin-top: 0.35rem;
+}
+.login-txt::-webkit-input-placeholder{
+    color: #fff;
+}
+.login-txt::-moz-placeholder{   /* Mozilla Firefox 19+ */
+    color: #fff;
+}
+.login-txt:-moz-placeholder{    /* Mozilla Firefox 4 to 18 */
+    color: #fff;
+}
+.login-txt:-ms-input-placeholder{  /* Internet Explorer 10-11 */ 
+    color: #fff;
+}
+.login-btn{
+    width: 100%;
+    height: 0.9rem;
+    line-height: 0.9rem;
+    border: none;
+    color: #fff;
+    font-size: 0.42rem;
+    text-align: center;
+    background: #71dd00;
+    margin-top: 0.8rem;
+}
+.login-img{
+    width: 2.22rem;
+}
