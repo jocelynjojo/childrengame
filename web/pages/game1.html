@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta name="viewport" content="width=device-width, user-scalable=no,initial-scale=1">
+    <link rel="stylesheet" href="../css/game.css">
+    <title>拼图游戏1</title>
+</head>
+
+<body>
+    <img src="../images/game1/jigsaw1_bg.jpg" alt="" class="secenbg">
+    <img src="../images/index/return.png" alt="" class="return" id="js-return">
+    <canvas id="canvas" width="2048" height="1536" style="background:transparent"></canvas>
+    <div class="gradewp" id="js-gradewp">
+        <div class="starswp">
+            <div class="star star1"></div>
+            <div class="star star2"></div>
+            <div class="star star3"></div>
+        </div>
+        <div class="btnwp">
+            <div class="btn again" id="js-again"></div>
+            <div class="btn hanber" id="js-hanber"></div>
+            <div class="btn next" id="js-next"></div>
+        </div>
+    </div>
+
+    <script src="../js/common/util.js"></script>
+    <script src="../js/game1/config.js"></script>
+    <script src="../js/common/touch.js"></script>
+    <script src="../js/common/ele.js"></script>
+    <script src="../js/game1/round.js"></script>
+    <script src="../js/game1/piece.js"></script>
+    <script src="../js/game1/index.js"></script>
+</body>
+
+</html>
