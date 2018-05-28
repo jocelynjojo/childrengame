@@ -77,24 +77,14 @@ var Game = {
       var opt = util.assign(opts, o)
       this.unfinish[i] = this.pieces[i] = new Piece(opt)
     }
+    // 初始化分数
+    this.grade = Grade.init('js-gradewp');
   },
   /**
    * 添加监听
    */
   addHandler: function () {
-    var self = this;
-    gradewp.addEventListener('touchstart', function (event) {
-      var target = event.target;
-      var id = target.id;
-      if (target.id == 'js-again') {
-        self.reset();
-        self.play();
-      } else if (target.id == 'js-hanber') {
-        console.log('hanber')
-      } else if (target.id == 'js-next') {
-        console.log('next')
-      }
-    }, { passive: true })
+
     var r = document.getElementById('js-return');
     r.addEventListener('touchstart', function (event) {
       location.href = 'index.html'
@@ -112,7 +102,6 @@ var Game = {
       piece.reset();
       this.unfinish[i] = piece;
     }
-    gradewp.style.display = 'none';
   },
   /** 
   * 更新游戏状态
@@ -125,7 +114,7 @@ var Game = {
     this.setStatus('start')
     this.drawOnce = true;
     this.releaseNum = 0;
-    this.startPlayTime = new Date().getTime();
+    this.opts.st = new Date().getTime();
     this.update()
   },
   /* 
@@ -133,32 +122,10 @@ var Game = {
   */
   end: function () {
     console.log('end')
-    this.showGrade()
-    this.sendPass();
+    this.grade.show(this.opts);
+    // this.grade.sendMsg();
   },
-  /**
-   * 告诉后台过了这关
-   */
-  sendPass: function () {
-    // Ajax.post({
-    //   url: ''
-    // })
-  },
-  /**
-   * 展示分数
-   */
-  showGrade: function () {
-    var playTime = (new Date()).getTime() - this.startPlayTime
-    var percent = playTime / this.opts.fullSec;
-    var starNum = this.opts.starNum;
-    var className = gradewp.className.replace(/\s*js-star\d*/, '');
-    if (percent > starNum - 1) {
-      gradewp.className = className + ' js-star1';
-    } else {
-      gradewp.className = className + ' js-star' + (starNum - Math.floor(percent));
-    }
-    gradewp.style.display = 'block';
-  },
+  
   /**
    * game 被触发什么事件
    * @param {String} type 事件类型

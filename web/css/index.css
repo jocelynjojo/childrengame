@@ -8,7 +8,17 @@ body {
     width: 100%;
     height: 100%;
 }
-
+.gray { 
+    -webkit-filter: grayscale(100%);
+    -moz-filter: grayscale(100%);
+    -ms-filter: grayscale(100%);
+    -o-filter: grayscale(100%);
+    
+    filter: grayscale(100%);
+	
+    filter: gray;
+}
+/*index.html  */
 .index-bg {
     width: 100%;
     height: 100%;
@@ -34,7 +44,7 @@ canvas {
 }
 .btnwp {
     position: absolute;
-    z-index: 20;
+    z-index: 40;
     top: 0.85rem;
     left: 0.4rem;
     width: 1.56rem;
@@ -48,7 +58,7 @@ canvas {
 
 .btnwp .btnstar {
     width: 1.16rem;
-    height: 1.46rem;
+    height: 1.12rem;
     margin-top: 0;
 }
 
@@ -208,13 +218,7 @@ canvas {
 .medal{
     height: 2.04rem;
 }
-.medal_8{
-    height: 2.10rem;
-}
-.medal_9{
-    height: 1.78rem;
-    margin-top: 0.2rem;
-}
+
 /*login.html  */
 .login-fromwp{
     position: absolute;
@@ -274,8 +278,58 @@ canvas {
     font-size: 0.42rem;
     text-align: center;
     background: #71dd00;
-    margin-top: 0.8rem;
 }
 .login-img{
     width: 2.22rem;
+}
+.login-err{
+    height: 0.8rem;
+    font-size: 0.3rem;
+    color: red;
+    line-height: 2em;
+}
+/*tip  */
+.tip1{
+    font-size: 0.38rem;
+    line-height: 1.5em;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 2.6rem;
+    background: #fff;
+    padding: 0.2rem;
+    border-radius: 7px;
+    z-index: 20;
+    color: #333;
+    opacity: 0;
+    display: none;
+}
+.tip1.js-show{
+    opacity: 1;
+    display: block;
+}
+.tip2{
+    font-size: 0.38rem;
+    line-height: 1.5em;
+    position: absolute;
+    top: 10.3rem;
+    left: 1.8rem;
+    width: 2.6rem;
+    background: rgba(255, 255, 255, 0.9);
+    padding: 0.15rem;
+    border-radius: 7px;
+    z-index: 20;
+    color: #333;
+     opacity: 0; 
+}
+.tip2.js-show{
+    opacity: 1;
+    z-index: 50;
+    /* display: block; */
+}
+.num-text{
+    margin-top: -2px;
+    font-size: 0.26rem;
+    color: #6c3a15;
+    text-shadow:1px 1px #fff,-1px -1px #fff,1px -1px #fff,-1px 1px #fff,2px 2px #fff,-2px -2px #fff,2px -2px #fff,-2px 2px #fff;
 }

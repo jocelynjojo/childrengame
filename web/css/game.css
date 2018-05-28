@@ -26,19 +26,31 @@ html,body{
     height: 100%;
     z-index: 10;
 }
+.gradewp-wp{
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.5);
+    display: flex;
+    display: -webkit-flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 80;
+}
+.gradewp-wp.js-hide{
+    display: none;
+}
 .gradewp{
     width: 10.50rem;
     height: 7.04rem;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    margin-left: -5.25rem;
-    margin-top: -3.52rem;
-    z-index: 80;
     color: #000;
     background: url('../images/common/finishbg.png') 0 0 no-repeat;
     background-size: 100%;
-    display: none;
+    position: relative;
 }
 .starswp{
     margin-top: 2.1rem;
@@ -55,13 +67,13 @@ html,body{
     margin-left: 0.36rem;
     margin-right: 0.36rem;
 }
-.gradewp.js-star1 .star1,.gradewp.js-star2 .star1,.gradewp.js-star3 .star1{
+.gradewp-wp.js-star1 .star1,.gradewp-wp.js-star2 .star1,.gradewp-wp.js-star3 .star1{
     background-image: url('../images/common/star_bright.png');
 }
-.gradewp.js-star2 .star2,.gradewp.js-star3 .star2{
+.gradewp-wp.js-star2 .star2,.gradewp-wp.js-star3 .star2{
     background-image: url('../images/common/star_bright.png');
 }
-.gradewp.js-star3 .star3{
+.gradewp-wp.js-star3 .star3{
     background-image: url('../images/common/star_bright.png');
 }
 .btnwp {
