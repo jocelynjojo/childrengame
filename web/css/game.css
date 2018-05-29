@@ -111,6 +111,14 @@ html,body{
     left: 0.6rem;
     z-index: 70;
 }
+.gradewp-wp .text{
+    position: absolute;
+    top: 0.07rem; 
+    left: 4.5rem;
+    color: rgba(255, 255, 255, 0.9);
+    font-size: 0.4rem;
+    text-shadow:1px 1px #fd9e11,-1px -1px #fd9e11,1px -1px #fd9e11,-1px 1px #fd9e11,2px 2px 2px #fd9e11,-2px -2px 2px #fd9e11,2px -2px 2px #fd9e11,-2px 2px 2px #fd9e11;
+}
 /*game3  */
 .piece-wp{
     width: 100%;
