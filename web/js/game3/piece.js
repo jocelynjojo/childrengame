@@ -6,7 +6,7 @@ var Piece = function (opts) {
     this.el = opts.el;
     this.w = opts.w;
     this.startx = this.x = opts.x; // 真正的距离
-    this.index = opts.index;
+    this.startIndex = this.index = opts.index;
     this.endIndex = opts.endIndex;
     this.zIndex = opts.zIndex;
     this.releaseTime = opts.releaseTime
@@ -22,6 +22,7 @@ Piece.prototype.reset = function(){
     // 自动运动的路径, 和这条路径上面运动的次数
     this.x = this.startx;
     this.el.style.zIndex = this.zIndex;
+    this.index = this.startIndex;
     this.draw();
 }
 

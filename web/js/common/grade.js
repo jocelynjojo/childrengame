@@ -22,6 +22,12 @@ var Grade = {
         }
         this.el.className = this.el.className.replace(/\s*js-hide\d*/, '')
     },
+    /**
+     * @param {object} opts 配置信息
+     */
+    show2: function (opts) {
+        this.el.className = this.el.className.replace(/\s*js-hide\d*/, '')
+    },
     addHandler: function () {
         var self = this;
         this.el.addEventListener('touchstart', function (event) {

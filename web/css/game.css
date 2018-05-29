@@ -114,10 +114,24 @@ html,body{
 .gradewp-wp .text{
     position: absolute;
     top: 0.07rem; 
-    left: 4.5rem;
+    left: 4.65rem;
     color: rgba(255, 255, 255, 0.9);
     font-size: 0.4rem;
     text-shadow:1px 1px #fd9e11,-1px -1px #fd9e11,1px -1px #fd9e11,-1px 1px #fd9e11,2px 2px 2px #fd9e11,-2px -2px 2px #fd9e11,2px -2px 2px #fd9e11,-2px 2px 2px #fd9e11;
+}
+.medlewp{
+    margin-top: 1.65rem;
+    text-align: center;
+    font-size: 0.55rem;
+    color: #fff;
+}
+.medal{
+    vertical-align: top;
+    width: 2.07rem;
+    margin-bottom: 0.28rem;
+}
+.gradewp2 .btnwp {
+    margin-top: 0.5rem;
 }
 /*game3  */
 .piece-wp{

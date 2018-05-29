@@ -34,6 +34,8 @@ var Game = {
      * 创建对象
      */
     createObj: function () {
+        // 分数对象
+        this.grade = Grade.init('js-gradewp')
         // 创建 触碰对象
         this.touch = new Touch(piecewp)
         // 创建碎片对象
@@ -70,13 +72,17 @@ var Game = {
      * 回到初始状态
      */
     reset: function () {
+        for (var i = 0, len = this.pieces.length; i < len; i++) {
+            this.pieces[i].reset();
+        }
     },
+    play: function(){},
     /* 
     * 结束游戏，停止循环
     */
     end: function () {
         console.log('end')
-        // this.grade.show(this.opts);
+        this.grade.show2();
         // this.grade.sendMsg();
     },
     /**
@@ -133,7 +139,7 @@ var Game = {
                     var self = this;
                     setTimeout(function(){
                         self.end()
-                    }, this.opts.releaseTime)
+                    }, this.opts.releaseTime + 100)
                 }
                 this.touchPiece = null;
             }
