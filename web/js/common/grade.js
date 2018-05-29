@@ -38,9 +38,13 @@ var Grade = {
                 Game.reset();
                 Game.play();
             } else if (target.id == 'js-hanber') {
-                console.log('hanber')
+                location.href = 'index.html'
             } else if (target.id == 'js-next') {
-                console.log('next')
+                var str = location.href;
+                var reg = /\/game\d/
+                var arr = reg.exec(str);
+                var num = Number(arr[0].replace('/game',''));
+                location.href = 'game'+(num + 1)+'.html?GameID='+(num + 1);
             }
         }, { passive: true })
     },

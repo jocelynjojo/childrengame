@@ -36,8 +36,8 @@ var Config = {
     { w: 455, h: 407, disx: -51, disy: -52 },
     { w: 390, h: 391, disx: -53, disy: -57 }
     ],
-    speed: 80, // 释放时候碎片的速度
-    maxTime: 5 //对应的速度最多能次数，大于这个次数，需要提速
+    trancls: 'J-tran',
+    releaseTime: 300
 }
 function reConfig(obj) {
     var canvas = document.getElementById('canvas')

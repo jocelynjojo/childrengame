@@ -167,6 +167,16 @@ html,body{
     transition: all 0.5s;
     -webkit-transition: all 0.5s;
 }
+/*game1  */
+.roundtarget{
+    /* { w: 607, h: 608, x: 727, y: 490 } */
+    position: absolute;
+    z-index: 18;
+    width: 6.07rem;
+    height: 6.08rem;
+    left: 7.27rem;
+    top: 4.90rem;
+}
 /*game2  */
 .container2{
     position: absolute;
