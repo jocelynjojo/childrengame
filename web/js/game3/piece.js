@@ -57,6 +57,7 @@ Piece.prototype.release = function(i){
     this.isInRelease = true;
     this.index = i;
     this.x = i * this.w;
+    this.el.className = this.cls;
     this.el.className = this.cls + ' ' + this.aniClass;
     this.draw();
     clearTimeout(this.timer)

@@ -138,7 +138,7 @@ html,body{
     left: 15.36rem;
 }
 .piece.shadow{
-    box-shadow: 0 0 15px 10px rgba(0,0,0,0.5);
+    box-shadow: 0 0 0.15rem 0.1rem rgba(0,0,0,0.5);
     z-index: 25;
 }
 .piece.J-tran{
