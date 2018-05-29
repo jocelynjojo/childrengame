@@ -46,7 +46,8 @@ var Config = {
     trancls: 'J-tran',
     discls: 'J-disappear',
     disTime: 300,
-    releaseTime: 300
+    releaseTime: 300,
+    zIndex: 20
 }
 function reConfig(obj) {
     var canvas = document.getElementById('canvas')

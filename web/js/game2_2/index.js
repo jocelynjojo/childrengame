@@ -141,7 +141,7 @@ var Game = {
   end: function () {
     console.log('end')
     this.grade.show(this.opts);
-    // this.grade.sendMsg();
+    this.grade.sendMsg();
   },
 
   /**
@@ -153,7 +153,7 @@ var Game = {
     if (type == 'touchstart') {
       for (var i = 0, len = this.moneys.length; i < len; i++) {
         var money = this.moneys[i]
-        if (extra.tg == money.pel && money.isInStart() && !this.isEnd()) {
+        if (extra.tg == money.el && money.isInStart() && !this.isEnd()) {
           money.setTouchLoc(this.touch.startX,this.touch.startY);
           this.touchPiece = money;
           this.update();

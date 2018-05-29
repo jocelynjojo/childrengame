@@ -24,6 +24,7 @@ function Money(opts) {
     this.releaseTime = opts.releaseTime
     this.disTimer = null;
     this.releaseTimer = null
+    this.zIndex = opts.zIndex
     // 信息
     this.reset();
 }
@@ -51,6 +52,7 @@ Money.prototype.reset = function () {
     // 设置状态
     this.setStatus('start');
     this.el.className = this.elcls;
+    this.pel.className = this.elcls;
     this.draw();
 }
 /**
@@ -67,17 +69,17 @@ Money.prototype.setXY = function (x, y) {
  * 画出钱
  */
 Money.prototype.draw = function () {
-    if (this.isInStart()) {
-        this.el.style.display = 'none';
-        this.pel.style.display = 'block';
-        this.pel.style.left = this.px + 'px';
-        this.pel.style.top = this.py + 'px';
-    } else {
+    if (this.isInStart() || this.isInRelease()) {
         this.el.style.display = 'block';
         this.pel.style.display = 'none';
-        this.el.style.left = this.x + 'px';
-        this.el.style.top = this.y + 'px';
+    } else {
+        this.el.style.display = 'none';
+        this.pel.style.display = 'block';
     }
+    this.el.style.left = this.x + 'px';
+    this.el.style.top = this.y + 'px';
+    this.pel.style.left = this.px + 'px';
+    this.pel.style.top = this.py + 'px';
 }
 /**
  * @param {string} status 钱的状态 'start', 'touch', 'release', 'end', 'disappear'
@@ -92,6 +94,8 @@ Money.prototype.setStatus = function (status) {
  */
 Money.prototype.setTouchLoc = function (x, y) {
     this.setStatus('touch');
+    this.el.style.zIndex = this.zIndex * 2;
+    this.pel.style.zIndex = this.zIndex * 2;
     this.disx = Math.floor(x - this.x);
     this.disy = Math.floor(y - this.y);
 }
@@ -110,18 +114,23 @@ Money.prototype.setMoveLoc = function (x, y) {
  */
 Money.prototype.release = function (ex, ey) {
     if (this.isInTarget(ex, ey)) {
-        this.el.className = this.elcls + ' ' + this.trancls + ' ' + this.discls
+        this.pel.className = this.elcls + ' ' + this.trancls + ' ' + this.discls
         this.setStatus('end');
     } else {
         this.setStatus('release')
-        this.el.className = this.elcls + ' ' + this.trancls;
         this.setXY(this.startx, this.starty);
+        this.el.className = this.elcls + ' ' + this.trancls;
+        this.pel.className = this.elcls + ' ' + this.trancls;
+        
         this.draw();
         var self = this;
         clearTimeout(this.releaseTimer)
         this.releaseTimer = setTimeout(function () {
             self.setStatus('start');
             self.el.className = self.elcls;
+            self.pel.className = self.elcls;
+            self.el.style.zIndex = self.zIndex;
+            self.pel.style.zIndex = self.zIndex;
             self.setXY(self.startx, self.starty);
             self.draw()
         }, this.releaseTime)

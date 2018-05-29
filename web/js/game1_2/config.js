@@ -37,7 +37,8 @@ var Config = {
     { w: 390, h: 391, disx: -53, disy: -57 }
     ],
     trancls: 'J-tran',
-    releaseTime: 300
+    releaseTime: 300,
+    zIndex: 20
 }
 function reConfig(obj) {
     var canvas = document.getElementById('canvas')

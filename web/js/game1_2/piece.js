@@ -23,7 +23,8 @@ function Piece(opts) {
     this.disTime = opts.disTime
     this.releaseTime = opts.releaseTime
     this.disTimer = null;
-    this.releaseTimer = null
+    this.releaseTimer = null;
+    this.zIndex = opts.zIndex
     // 信息
     this.reset();
 }
@@ -92,6 +93,8 @@ Piece.prototype.setStatus = function (status) {
  */
 Piece.prototype.setTouchLoc = function (x, y) {
     this.setStatus('touch');
+    this.el.style.zIndex = this.zIndex * 2;
+    this.pel.style.zIndex = this.zIndex * 2;
     this.disx = Math.floor(x - this.x);
     this.disy = Math.floor(y - this.y);
 }
@@ -115,9 +118,11 @@ Piece.prototype.release = function (ex, ey) {
         this.setXY(this.endx, this.endy);
         this.draw();
         var self = this;
-         self.setStatus('end');
+        self.setStatus('end');
         clearTimeout(this.releaseTimer)
         this.releaseTimer = setTimeout(function () {
+            self.el.style.zIndex = self.zIndex;
+            self.pel.style.zIndex = self.zIndex;
             self.el.className = self.elcls;
             self.setXY(self.endx, self.endy);
             self.draw()
@@ -131,6 +136,8 @@ Piece.prototype.release = function (ex, ey) {
         clearTimeout(this.releaseTimer)
         this.releaseTimer = setTimeout(function () {
             self.setStatus('start');
+            self.el.style.zIndex = self.zIndex;
+            self.pel.style.zIndex = self.zIndex;
             self.el.className = self.elcls;
             self.setXY(self.startx, self.starty);
             self.draw()
