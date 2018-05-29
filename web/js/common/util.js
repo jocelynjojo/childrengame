@@ -8,6 +8,14 @@ window.requestAnimFrame =
     function (callback) {
         window.setTimeout(callback, 1000 / 60);
     }
+window.cancelAnimFrame = window.cancelAnimationFrame ||
+    window.webkitCancelAnimationFrame ||
+    window.mozCancelAnimationFrame ||
+    window.oCancelAnimationFrame ||
+    window.msCancelAnimationFrame ||
+    function (id) {
+        window.clearTimeout(id);
+    }
 
 
 var util = {
@@ -61,6 +69,22 @@ var util = {
         var clientWidth = html.clientWidth;
         var fs = designFS / designW * clientWidth;
         html.style.fontSize = fs + 'px';
+    },
+    formatTime: function(date){
+        var year = date.getFullYear();
+        var month = date.getMonth() + 1;
+        var date = date.getDate();
+        var today = new Date();
+        var today_year = today.getFullYear();
+        var today_month = today.getMonth() + 1;
+        var today_date = today.getDate();
+        console.log('今天：',today_year,'-',today_month,'-',today_date)
+        console.log('那天：',year,'-',month,'-',date)
+        if(year == today_year && month == today_month && date == today_date){
+            return '今天'
+        }else{
+            return month + '月' + date + '日'
+        }
     }
 }
 var Ajax = {

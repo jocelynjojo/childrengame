@@ -1,7 +1,7 @@
 
-var Touch = function (canvas) {
+var Touch = function (el) {
     var self = this;
-    canvas.addEventListener('touchstart', function (event) {
+    el.addEventListener('touchstart', function (event) {
         event.stopPropagation();
         event.preventDefault()
         self.touchStart(event);
@@ -32,6 +32,7 @@ Touch.prototype = {
         this.startX = event.touches[0].clientX;
         this.startY = event.touches[0].clientY;
         this.isTouchStart = true;
+        Game.trigger('touchstart', { tg: event.target })
         // console.log('touchstart', this.startX, this.startY)
     },
     touchMove: function (event) {
@@ -40,16 +41,18 @@ Touch.prototype = {
             this.moveX = event.touches[0].clientX;
             this.moveY = event.touches[0].clientY;
             this.isTouchMove = true;
+            Game.trigger('touchmove')
         }
+
         // console.log('touchmove', this.moveX, this.moveY)
     },
     touchEnd: function (event) {
         var event = event || window.event;
-        Game.trigger('touchend')
         this.endX = event.changedTouches[0].clientX;
         this.endY = event.changedTouches[0].clientY;
         this.isTouchStart = false;
         this.isTouchMove = false;
+        Game.trigger('touchend')
     },
     reset: function () {
         this.startX = 0;
