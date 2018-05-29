@@ -8,5 +8,6 @@ var Config = {
     endIndex: [2,0,3,1],
     zIndex: 20,
     aniClass: 'J-tran',
+    shadowCls: 'shadow',
     releaseTime: 500 // 释放时候碎片的时间
 }

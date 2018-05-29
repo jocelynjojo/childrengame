@@ -13,6 +13,7 @@ var Piece = function (opts) {
     this.timer = null
     this.aniClass = opts.aniClass
     this.cls = this.el.className;
+    this.shadowCls = opts.shadowCls;
 }
 /**
  * 初始化 或者重置化碎片参数，可以改变的参数
@@ -39,6 +40,7 @@ Piece.prototype.draw = function () {
 Piece.prototype.setTouchLoc = function (x, y) {
     this.disx = Math.floor(x - this.x);
     this.el.style.zIndex = this.zIndex * 2;
+    this.el.className = this.cls + ' ' + this.shadowCls;
 }
 /**
  * 让Piece运动到（x,y) 这个位置
