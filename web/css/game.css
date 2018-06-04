@@ -109,7 +109,7 @@ html,body{
     position: absolute;
     top: 0.5rem;
     left: 0.6rem;
-    z-index: 70;
+    z-index: 200;
 }
 .gradewp-wp .text{
     position: absolute;
@@ -166,4 +166,79 @@ html,body{
 .piece.J-tran{
     transition: all 0.5s;
     -webkit-transition: all 0.5s;
+}
+/*game1  */
+.roundtarget{
+    /* { w: 607, h: 608, x: 727, y: 490 } */
+    position: absolute;
+    z-index: 18;
+    width: 6.07rem;
+    height: 6.08rem;
+    left: 7.27rem;
+    top: 4.90rem;
+}
+/*game2  */
+.container2{
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 20;
+}
+.piece2{
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 20;
+    display: none;
+}
+.piece2.J-tran{
+    transition: all 0.3s;
+    -webkit-transition: all 0.3s;
+}
+.piece2.J-disappear{
+    opacity: 0;
+}
+.cointarget{
+    /* w: 389, h: 549, x: 1226, y: 917 */
+    position: absolute;
+    z-index: 18;
+    width: 3.89rem;
+    height: 5.49rem;
+    left: 12.26rem;
+    top: 9.17rem;
+}
+.papertarget{
+    /*w: 657, h: 557, x: 270, y: 928, type  */
+    position: absolute;
+    z-index: 18;
+    width: 6.57rem;
+    height: 5.57rem;
+    left: 2.7rem;
+    top: 9.28rem;
+}
+
+/*game4  */
+.container4{
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 15.36rem;
+    z-index: 20;
+    background: url('../images/game4/scene4_bg.jpg') 0 0 no-repeat;
+    background-size: 100% 100%;
+}
+.game4-popup{
+    width: 18.05rem;
+    position: absolute;
+    top: 0;
+    left: 0.3rem;
+}
+.game4-ok{
+    width: 3.83rem;
+    position: absolute;
+    left: 8.66rem;
+    top: 9.91rem;
+    z-index: 10;
 }
